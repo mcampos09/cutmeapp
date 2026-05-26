@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Cut Me — Agenda Belleza</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- reCAPTCHA v2 checkbox — visible, for public booking form -->
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --p:   #7B5EA7;
+  --pl:  #EDE9F6;
+  --pk:  #D4547A;
+  --t:   #2A9D8F;
+  --a:   #E9A84C;
+  --ink: #1A1228;
+  --ink2:#4A4060;
+  --ink3:#9E94B0;
+  --bg:  #F6F4FB;
+  --sur: #FFFFFF;
+  --bdr: rgba(123,94,167,0.14);
+  --grad:linear-gradient(135deg,#7B5EA7,#D4547A);
+  --sh:  0 4px 24px rgba(123,94,167,0.12);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── HEADER ── */
+header {
+  position: sticky; top: 0; z-index: 50;
+  padding: 0 24px; height: 60px;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--bdr);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px; font-weight: 600; color: var(--ink);
+  display: flex; align-items: center; gap: 8px;
+}
+.logo-mark {
+  width: 30px; height: 30px; border-radius: 8px;
+  background: var(--grad);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+}
+.logo span { color: var(--p); }
+
+/* ── BUTTONS ── */
+.cta-primary {
+  padding: 10px 22px;
+  background: var(--grad);
+  border: none; border-radius: 100px;
+  color: #fff; font-family: 'DM Sans', sans-serif;
+  font-size: 14px; font-weight: 500; cursor: pointer;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.cta-primary:hover { box-shadow: 0 6px 24px rgba(123,94,167,0.32); transform: translateY(-1px); }
+
+/* ── HERO ── */
+.hero {
+  padding: 72px 24px 64px;
+  background: var(--sur);
+  text-align: center;
+  position: relative; overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; top: -120px; left: 50%; transform: translateX(-50%);
+  width: 600px; height: 600px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(123,94,167,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 6px 14px;
+  background: var(--pl); border: 1px solid rgba(123,94,167,0.22);
+  border-radius: 100px;
+  font-size: 11px; font-weight: 500; color: var(--p);
+  margin-bottom: 24px;
+  font-family: 'DM Sans', sans-serif; letter-spacing: 0.02em;
+}
+.hero-badge::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--p); animation: blink 2s infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.hero h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(32px, 7vw, 52px);
+  font-weight: 300; line-height: 1.1;
+  letter-spacing: -0.02em; color: var(--ink);
+  margin-bottom: 16px; max-width: 600px; margin-left: auto; margin-right: auto;
+}
+.hero h1 em { font-style: italic; color: var(--p); }
+.hero > p {
+  font-size: 16px; color: var(--ink2); line-height: 1.7;
+  max-width: 460px; margin: 0 auto 32px; font-weight: 400;
+}
+.hero .cta-primary { font-size: 16px; padding: 14px 36px; }
+.social-proof {
+  margin-top: 20px;
+  font-size: 13px; color: var(--ink3); font-weight: 400;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.social-proof::before { content: '⭐'; font-size: 14px; }
+.whatsapp {
+  display: inline-flex; align-items: center; gap: 8px;
+  margin-top: 14px; font-size: 14px; font-weight: 500;
+  color: var(--t); text-decoration: none;
+  padding: 8px 18px; border: 1.5px solid rgba(42,157,143,0.3);
+  border-radius: 100px; transition: background 0.2s;
+}
+.whatsapp:hover { background: rgba(42,157,143,0.07); }
+.whatsapp::before { content: '💬'; font-size: 16px; }
+
+/* ── SECTIONS ── */
+.section {
+  padding: 56px 24px;
+  background: var(--sur);
+  margin-top: 8px;
+  position: relative;
+}
+.section:nth-child(even) { background: var(--bg); }
+.section h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(26px, 5vw, 36px);
+  font-weight: 300; letter-spacing: -0.01em;
+  color: var(--ink); margin-bottom: 28px;
+}
+.section h2 em { font-style: italic; color: var(--p); }
+
+/* ── STEPS ── */
+.steps {
+  display: flex; flex-direction: column; gap: 0;
+  max-width: 480px;
+}
+.step {
+  display: flex; align-items: flex-start; gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--bdr);
+}
+.step:last-child { border-bottom: none; }
+.step-n {
+  width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
+  background: var(--grad);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 600; color: #fff;
+}
+.step-txt { font-size: 15px; color: var(--ink2); padding-top: 4px; line-height: 1.5; }
+.step-txt strong { display: block; color: var(--ink); font-weight: 600; margin-bottom: 2px; }
+
+/* ── CARDS ── */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+}
+.card {
+  background: var(--sur);
+  border: 1px solid var(--bdr);
+  border-radius: 16px; padding: 20px;
+  box-shadow: var(--sh);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.card:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(123,94,167,0.16); }
+.card h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px; font-weight: 600; color: var(--ink); margin-bottom: 4px;
+}
+.card p { font-size: 14px; color: var(--ink2); margin-bottom: 8px; }
+.card .price {
+  font-size: 18px; font-weight: 600; color: var(--p);
+  font-family: 'Cormorant Garamond', serif;
+}
+.tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  margin-top: 10px; font-size: 11px; font-weight: 500;
+  padding: 4px 10px; border-radius: 100px;
+  background: var(--pl); color: var(--p);
+}
+.tag.hot { background: rgba(212,84,122,0.1); color: var(--pk); }
+.tag.urgent { background: var(--al,#FDF3E3); color: #92400E; }
+
+/* Pro cards */
+.pro-card {
+  background: var(--sur);
+  border: 1px solid var(--bdr);
+  border-radius: 16px; padding: 20px;
+  box-shadow: var(--sh);
+  display: flex; align-items: center; gap: 14px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.pro-card:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(123,94,167,0.16); }
+.pro-ava {
+  width: 52px; height: 52px; border-radius: 50%; flex-shrink: 0;
+  background: var(--grad);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; font-weight: 700; color: #fff;
+  font-family: 'Cormorant Garamond', serif;
+}
+.pro-info h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px; font-weight: 600; color: var(--ink); margin-bottom: 2px;
+}
+.pro-info .stars { font-size: 12px; color: var(--a); margin-bottom: 2px; }
+.pro-info .esp { font-size: 13px; color: var(--ink3); }
+
+/* ── BOOKING ── */
+.booking { max-width: 440px; }
+.booking input, .booking select {
+  width: 100%; padding: 12px 16px;
+  background: var(--bg); border: 1.5px solid var(--bdr);
+  border-radius: 10px; font-family: 'DM Sans', sans-serif;
+  font-size: 14px; color: var(--ink); margin-bottom: 12px;
+  outline: none; transition: border-color 0.2s, box-shadow 0.2s;
+  -webkit-appearance: none;
+}
+.booking input:focus, .booking select:focus {
+  border-color: var(--p);
+  box-shadow: 0 0 0 3px rgba(123,94,167,0.12);
+}
+.booking input::placeholder { color: var(--ink3); }
+.booking .cta-primary { width: 100%; padding: 14px; font-size: 15px; border-radius: 12px; }
+.booking-note {
+  font-size: 12px; color: var(--ink3);
+  text-align: center; margin-top: 10px; line-height: 1.6;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.booking-note::before { content: '🔒'; font-size: 12px; }
+
+/* ── CTA FIJO ── */
+.cta-fixed {
+  position: fixed; bottom: 24px; right: 24px; z-index: 999;
+  padding: 14px 22px;
+  background: var(--grad); border: none; border-radius: 100px;
+  color: #fff; font-family: 'DM Sans', sans-serif;
+  font-size: 14px; font-weight: 600; cursor: pointer;
+  box-shadow: 0 8px 32px rgba(123,94,167,0.35);
+  display: flex; align-items: center; gap: 8px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.cta-fixed:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(123,94,167,0.45); }
+.cta-fixed::before { content: '✂️'; font-size: 15px; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">
+    <div class="logo-mark">✂️</div>
+    Cut <span>Me</span>
+  </div>
+  <button class="cta-primary">Reservar</button>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">Profesionales verificados · Chile</div>
+  <h1>Agenda tu hora de belleza en <em>menos de 30 segundos</em></h1>
+  <p>Sin llamadas, sin esperas. Reserva online con profesionales verificados cerca de ti.</p>
+  <button class="cta-primary">Reservar ahora</button>
+  <div class="social-proof">4.9 promedio · +120 clientes felices esta semana</div>
+  <a href="https://wa.me/569XXXXXXXX" class="whatsapp">Reserva por WhatsApp</a>
+</section>
+
+<!-- CÓMO FUNCIONA -->
+<section class="section">
+  <h2>Así de <em>fácil</em></h2>
+  <div class="steps">
+    <div class="step">
+      <div class="step-n">1</div>
+      <div class="step-txt"><strong>Elige tu servicio</strong>Corte, manicure, maquillaje y más.</div>
+    </div>
+    <div class="step">
+      <div class="step-n">2</div>
+      <div class="step-txt"><strong>Selecciona horario</strong>Ve disponibilidad en tiempo real.</div>
+    </div>
+    <div class="step">
+      <div class="step-n">3</div>
+      <div class="step-txt"><strong>Reserva en segundos</strong>Confirmación inmediata sin llamadas.</div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICIOS -->
+<section class="section">
+  <h2>Servicios <em>populares</em></h2>
+  <div class="cards">
+    <div class="card">
+      <h3>✂️ Corte de cabello</h3>
+      <p>30 min · Estudio o domicilio</p>
+      <div class="price">Desde $12.000</div>
+      <div class="tag hot">🔥 Más reservado hoy</div>
+    </div>
+    <div class="card">
+      <h3>💅 Manicure</h3>
+      <p>45 min · Estudio o domicilio</p>
+      <div class="price">Desde $10.000</div>
+      <div class="tag urgent">⏰ Últimas horas</div>
+    </div>
+    <div class="card">
+      <h3>💄 Maquillaje social</h3>
+      <p>90 min · Domicilio disponible</p>
+      <div class="price">Desde $35.000</div>
+      <div class="tag">⭐ Top valorado</div>
+    </div>
+    <div class="card">
+      <h3>🎨 Coloración</h3>
+      <p>120 min · Estudio</p>
+      <div class="price">Desde $45.000</div>
+      <div class="tag">✨ Especialistas</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROFESIONALES -->
+<section class="section">
+  <h2>Profesionales <em>destacados</em></h2>
+  <div class="cards">
+    <div class="pro-card">
+      <div class="pro-ava">MG</div>
+      <div class="pro-info">
+        <h3>María González</h3>
+        <div class="stars">★★★★★ 4.9 · 87 reseñas</div>
+        <div class="esp">Especialista en coloración</div>
+      </div>
+    </div>
+    <div class="pro-card">
+      <div class="pro-ava" style="background:linear-gradient(135deg,#D4547A,#E9A84C);">CR</div>
+      <div class="pro-info">
+        <h3>Camila Rojas</h3>
+        <div class="stars">★★★★★ 4.8 · 65 reseñas</div>
+        <div class="esp">Manicure y nail art</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESERVA -->
+<section class="section">
+  <h2>Reserva <em>rápida</em></h2>
+  <div class="booking">
+    <input type="text" placeholder="Tu nombre">
+    <input type="text" placeholder="Tu WhatsApp (+56 9...)">
+    <select>
+      <option value="">Selecciona un servicio</option>
+      <option>✂️ Corte de cabello — $12.000</option>
+      <option>💅 Manicure — $10.000</option>
+      <option>💄 Maquillaje social — $35.000</option>
+      <option>🎨 Coloración — $45.000</option>
+    </select>
+    <!-- reCAPTCHA v2 — Replace data-sitekey with your real key -->
+    <div class="g-recaptcha"
+         data-sitekey="TU_SITE_KEY_V2"
+         data-theme="light"
+         data-size="normal"
+         style="margin-bottom:12px;"></div>
+    <button class="cta-primary" onclick="confirmarReserva()">Confirmar reserva</button>
+    <div class="booking-note">Confirmación en minutos · Sin compromiso</div>
+    <div style="font-size:11px;color:var(--ink3);text-align:center;margin-top:8px;line-height:1.6;">Protegido por reCAPTCHA · <a href="https://policies.google.com/privacy" target="_blank" style="color:var(--p);">Privacidad</a> · <a href="https://policies.google.com/terms" target="_blank" style="color:var(--p);">Términos</a></div>
+  </div>
+</section>
+
+<!-- CTA FIJO -->
+<button class="cta-fixed">Reservar ahora</button>
+
+<script>
+function confirmarReserva(){
+  const nombre = document.querySelector('.booking input[placeholder="Tu nombre"]').value.trim();
+  const wa     = document.querySelector('.booking input[placeholder="Tu WhatsApp (+56 9...)"]').value.trim();
+  const svc    = document.querySelector('.booking select').value;
+
+  if(!nombre){ alert('Ingresa tu nombre'); return; }
+  if(!wa)    { alert('Ingresa tu WhatsApp'); return; }
+  if(!svc)   { alert('Selecciona un servicio'); return; }
+
+  // reCAPTCHA v2 — verify checkbox was completed
+  const captchaResp = typeof grecaptcha !== 'undefined' ? grecaptcha.getResponse() : 'dev-mode';
+  if(!captchaResp){
+    const box = document.querySelector('.g-recaptcha');
+    if(box){
+      box.scrollIntoView({behavior:'smooth', block:'center'});
+      box.style.outline = '2px solid #D4547A';
+      box.style.borderRadius = '4px';
+      setTimeout(()=>{ box.style.outline=''; }, 2000);
+    }
+    return;
+  }
+
+  // ✅ Captcha passed — send to backend
+  // In production: POST to your API with { nombre, wa, svc, captchaToken: captchaResp }
+  console.log('[Reserva]', { nombre, wa, svc, captchaToken: captchaResp.slice(0,20)+'…' });
+  alert('¡Reserva confirmada! Te contactaremos en minutos 🎉');
+  if(typeof grecaptcha !== 'undefined') grecaptcha.reset();
+}
+</script>
+</body>
+</html>

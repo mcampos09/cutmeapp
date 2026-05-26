@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cut Me — Únete como Profesional</title>
+<!-- reCAPTCHA v2 checkbox — visible, for public lead form -->
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --p:    #7B5EA7;
+  --p-l:  #EDE9F6;
+  --p-m:  #C4B8E8;
+  --pk:   #D4547A;
+  --pk-l: #FAEEF3;
+  --t:    #2A9D8F;
+  --t-l:  #E0F5F3;
+  --a:    #E9A84C;
+  --a-l:  #FDF3E3;
+  --ink:  #1A1228;
+  --ink2: #4A4060;
+  --ink3: #7A6E94;
+  --bg:   #FAFAF8;
+  --bg2:  #F3F0F9;
+  --bg3:  #EDE9F6;
+  --sur:  #FFFFFF;
+  --bdr:  rgba(123,94,167,0.14);
+  --bdr2: rgba(123,94,167,0.25);
+  --grad: linear-gradient(135deg, var(--p), var(--pk));
+  --grad2:linear-gradient(135deg, var(--p), var(--t));
+  --shadow: 0 2px 20px rgba(123,94,167,0.10);
+  --shadow-lg: 0 8px 40px rgba(123,94,167,0.16);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0; z-index: 100;
+  padding: 0 40px;
+  height: 64px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(250,250,248,0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--bdr);
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 10px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px; font-weight: 600;
+  color: var(--ink); text-decoration: none;
+}
+.nav-logo-mark {
+  width: 34px; height: 34px; border-radius: 10px;
+  background: var(--grad);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+}
+.nav-logo span { color: var(--p); }
+.nav-cta {
+  padding: 10px 24px;
+  background: var(--grad);
+  border: none; border-radius: 100px;
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px; font-weight: 500;
+  cursor: pointer; text-decoration: none;
+  display: inline-block;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.nav-cta:hover { box-shadow: 0 6px 24px rgba(123,94,167,0.35); transform: translateY(-1px); }
+
+/* ── HERO ── */
+.hero {
+  padding: 120px 40px 80px;
+  max-width: 900px; margin: 0 auto;
+  text-align: center;
+  position: relative;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 7px 16px;
+  background: var(--p-l);
+  border: 1px solid var(--bdr2);
+  border-radius: 100px;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--p); margin-bottom: 32px;
+}
+.hero-badge::before {
+  content: '';
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--p);
+  animation: blink 2s ease-in-out infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.hero h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(48px, 9vw, 84px);
+  font-weight: 300; line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin-bottom: 24px;
+}
+.hero h1 em { font-style: italic; color: var(--p); }
+.hero h1 .outlined {
+  -webkit-text-stroke: 2px var(--p);
+  color: transparent;
+}
+.hero-desc {
+  font-size: 17px; line-height: 1.75;
+  color: var(--ink2);
+  max-width: 560px; margin: 0 auto 40px;
+  font-weight: 400;
+}
+.hero-actions {
+  display: flex; align-items: center; justify-content: center;
+  gap: 16px; flex-wrap: wrap; margin-bottom: 64px;
+}
+.btn-main {
+  padding: 16px 36px;
+  background: var(--grad);
+  border: none; border-radius: 100px;
+  color: #fff; font-family: 'DM Sans', sans-serif;
+  font-size: 16px; font-weight: 500;
+  cursor: pointer; text-decoration: none;
+  display: inline-block;
+  transition: box-shadow 0.25s, transform 0.25s;
+}
+.btn-main:hover { box-shadow: 0 10px 36px rgba(123,94,167,0.32); transform: translateY(-2px); }
+.btn-ghost {
+  padding: 15px 28px;
+  background: transparent;
+  border: 1.5px solid var(--bdr2);
+  border-radius: 100px;
+  color: var(--ink2); font-family: 'DM Sans', sans-serif;
+  font-size: 15px; font-weight: 400;
+  cursor: pointer; text-decoration: none;
+  display: inline-block;
+  transition: border-color 0.2s, color 0.2s;
+}
+.btn-ghost:hover { border-color: var(--p); color: var(--p); }
+
+/* Stats bar */
+.stats-bar {
+  display: flex; justify-content: center; gap: 0;
+  border: 1px solid var(--bdr2);
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--sur);
+  box-shadow: var(--shadow);
+  max-width: 600px; margin: 0 auto;
+}
+.stat-item {
+  flex: 1; padding: 24px 20px;
+  text-align: center;
+  border-right: 1px solid var(--bdr);
+}
+.stat-item:last-child { border-right: none; }
+.stat-n {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 36px; font-weight: 600;
+  color: var(--ink); line-height: 1; margin-bottom: 6px;
+}
+.stat-n span { color: var(--p); }
+.stat-l { font-size: 12px; color: var(--ink3); font-weight: 500; }
+
+/* ── SECTION SHARED ── */
+.section-inner { max-width: 1080px; margin: 0 auto; padding: 0 40px; }
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--p); margin-bottom: 18px;
+}
+.eyebrow::after { content:''; width: 32px; height: 1px; background: var(--p-m); }
+.section-h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(34px, 5vw, 52px);
+  font-weight: 300; line-height: 1.1;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+}
+.section-h2 em { font-style: italic; color: var(--p); }
+
+/* ── SOCIAL PROOF STRIP ── */
+.proof-strip {
+  background: var(--p-l);
+  padding: 18px 40px;
+  display: flex; align-items: center; justify-content: center;
+  gap: 40px; flex-wrap: wrap;
+  border-top: 1px solid var(--bdr); border-bottom: 1px solid var(--bdr);
+}
+.proof-item {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 13px; color: var(--ink2); font-weight: 500;
+}
+.proof-icon { font-size: 18px; }
+
+/* ── HOW IT WORKS ── */
+.how { padding: 100px 0; }
+.how-head {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 60px; align-items: end;
+  margin-bottom: 56px;
+}
+.how-head p { font-size: 16px; line-height: 1.8; color: var(--ink2); margin-top: 16px; }
+.steps-grid {
+  display: grid; grid-template-columns: repeat(4,1fr); gap: 16px;
+}
+.step-card {
+  background: var(--sur);
+  border: 1px solid var(--bdr);
+  border-radius: 20px; padding: 32px 24px;
+  transition: box-shadow 0.25s, transform 0.25s;
+  position: relative; overflow: hidden;
+}
+.step-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
+.step-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+}
+.step-card:nth-child(1)::before { background: var(--p); }
+.step-card:nth-child(2)::before { background: var(--t); }
+.step-card:nth-child(3)::before { background: var(--pk); }
+.step-card:nth-child(4)::before { background: var(--a); }
+.step-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 48px; font-weight: 300;
+  color: var(--p-m); line-height: 1; margin-bottom: 16px;
+}
+.step-icon {
+  width: 44px; height: 44px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; margin-bottom: 16px;
+}
+.step-card h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px; font-weight: 600; margin-bottom: 10px; color: var(--ink);
+}
+.step-card p { font-size: 14px; color: var(--ink2); line-height: 1.7; }
+
+/* ── BENEFITS ── */
+.benefits { padding: 80px 0; background: var(--bg2); }
+.benefits-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 16px; margin-top: 52px;
+}
+.benefit {
+  background: var(--sur);
+  border: 1px solid var(--bdr);
+  border-radius: 20px; padding: 40px 36px;
+  transition: box-shadow 0.25s;
+  position: relative; overflow: hidden;
+}
+.benefit:hover { box-shadow: var(--shadow-lg); }
+.benefit-icon { font-size: 36px; margin-bottom: 20px; display: block; }
+.benefit h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px; font-weight: 600; margin-bottom: 12px; color: var(--ink);
+}
+.benefit p { font-size: 15px; color: var(--ink2); line-height: 1.75; max-width: 320px; }
+.benefit-num {
+  position: absolute; bottom: -16px; right: 16px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 96px; font-weight: 600;
+  color: var(--p-l); line-height: 1; pointer-events: none;
+}
+
+/* ── TESTIMONIALS ── */
+.testimonials { padding: 100px 0; overflow: hidden; }
+.track-wrap { overflow: hidden; margin-top: 52px; }
+.track {
+  display: flex; gap: 20px;
+  animation: slide 35s linear infinite;
+  width: max-content;
+}
+.track:hover { animation-play-state: paused; }
+@keyframes slide { to { transform: translateX(-50%); } }
+.tcard {
+  width: 300px; flex-shrink: 0;
+  background: var(--sur);
+  border: 1px solid var(--bdr);
+  border-radius: 18px; padding: 26px 24px;
+  box-shadow: var(--shadow);
+}
+.tcard-stars { color: var(--a); font-size: 14px; margin-bottom: 14px; letter-spacing: 2px; }
+.tcard-quote {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 17px; font-style: italic; font-weight: 400;
+  color: var(--ink); line-height: 1.65; margin-bottom: 20px;
+}
+.tcard-author { display: flex; align-items: center; gap: 10px; }
+.tcard-ava {
+  width: 38px; height: 38px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 600; color: #fff; flex-shrink: 0;
+}
+.tcard-name { font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 2px; }
+.tcard-role { font-size: 11px; color: var(--ink3); }
+
+/* ── SPECIALTIES ── */
+.specialties { padding: 80px 0; }
+.cat-wrap {
+  display: flex; flex-wrap: wrap; gap: 10px; margin-top: 40px;
+}
+.cat-pill {
+  padding: 11px 20px;
+  border: 1.5px solid var(--bdr2);
+  border-radius: 100px;
+  font-size: 14px; color: var(--ink2);
+  background: var(--sur);
+  cursor: pointer; transition: all 0.18s;
+  display: flex; align-items: center; gap: 8px;
+  font-weight: 400;
+}
+.cat-pill:hover { border-color: var(--p); color: var(--p); background: var(--p-l); }
+.cat-pill.active { border-color: var(--p); color: var(--p); background: var(--p-l); font-weight: 500; }
+
+/* ── FORM SECTION ── */
+.form-section { padding: 100px 0 120px; background: var(--bg2); }
+.form-wrap {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 80px; align-items: start;
+}
+.form-left h2 { margin-bottom: 20px; }
+.form-left p {
+  font-size: 16px; color: var(--ink2);
+  line-height: 1.8; margin-bottom: 40px;
+}
+.trust-list { display: flex; flex-direction: column; gap: 18px; }
+.trust-item { display: flex; align-items: flex-start; gap: 14px; }
+.trust-ico {
+  width: 40px; height: 40px; border-radius: 12px;
+  background: var(--p-l); border: 1px solid var(--bdr2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+}
+.trust-item strong { display: block; font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 3px; }
+.trust-item span { font-size: 13px; color: var(--ink2); line-height: 1.6; }
+
+/* Form card */
+.form-card {
+  background: var(--sur);
+  border: 1px solid var(--bdr2);
+  border-radius: 24px; padding: 40px;
+  box-shadow: var(--shadow-lg);
+  position: relative; overflow: hidden;
+}
+.form-card::before {
+  content: ''; position: absolute;
+  top: 0; left: 0; right: 0; height: 3px;
+  background: var(--grad);
+}
+.form-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px; font-weight: 600; color: var(--ink); margin-bottom: 4px;
+}
+.form-sub { font-size: 14px; color: var(--ink3); margin-bottom: 28px; }
+.fgrp { margin-bottom: 18px; }
+.flbl {
+  display: block; font-size: 11px; font-weight: 600;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--ink3); margin-bottom: 7px;
+}
+.finp {
+  width: 100%; padding: 12px 16px;
+  background: var(--bg);
+  border: 1.5px solid var(--bdr2);
+  border-radius: 10px;
+  color: var(--ink); font-family: 'DM Sans', sans-serif;
+  font-size: 14px; outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  -webkit-appearance: none; appearance: none;
+}
+.finp::placeholder { color: var(--ink3); }
+.finp:focus { border-color: var(--p); box-shadow: 0 0 0 3px rgba(123,94,167,0.12); }
+.finp option { background: var(--sur); color: var(--ink); }
+.fgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.spec-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.spec-pill {
+  padding: 8px 14px;
+  border: 1.5px solid var(--bdr2);
+  border-radius: 100px;
+  font-size: 12px; color: var(--ink2);
+  cursor: pointer; user-select: none;
+  transition: all 0.15s; background: var(--bg);
+}
+.spec-pill:hover { border-color: var(--p); color: var(--p); background: var(--p-l); }
+.spec-pill.on { border-color: var(--p); color: var(--p); background: var(--p-l); font-weight: 500; }
+.f-submit {
+  width: 100%; padding: 16px;
+  background: var(--grad); border: none; border-radius: 12px;
+  color: #fff; font-family: 'DM Sans', sans-serif;
+  font-size: 15px; font-weight: 500; cursor: pointer;
+  margin-top: 8px; transition: box-shadow 0.25s, transform 0.2s;
+}
+.f-submit:hover { box-shadow: 0 8px 28px rgba(123,94,167,0.32); transform: translateY(-1px); }
+.f-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
+.f-legal {
+  font-size: 11px; color: var(--ink3);
+  text-align: center; margin-top: 14px; line-height: 1.6;
+}
+.f-legal a { color: var(--p); text-decoration: none; }
+.counter {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 12px; color: var(--ink3); margin-bottom: 20px;
+}
+.counter-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--t); }
+
+/* Success */
+.success { display: none; text-align: center; padding: 16px 0; }
+.success-ico {
+  width: 68px; height: 68px; border-radius: 50%;
+  background: var(--grad2); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px; margin: 0 auto 20px;
+}
+.success h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px; font-weight: 600; margin-bottom: 10px; color: var(--ink);
+}
+.success p { font-size: 15px; color: var(--ink2); line-height: 1.7; }
+.success-ref {
+  margin-top: 24px; padding: 16px;
+  background: var(--t-l); border: 1px solid rgba(42,157,143,0.3);
+  border-radius: 12px;
+}
+.success-ref-l { font-size: 11px; font-family: 'DM Mono', monospace; color: var(--ink3); margin-bottom: 4px; letter-spacing: 0.08em; }
+.success-ref-n { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 600; color: var(--t); }
+
+/* ── FOOTER ── */
+footer {
+  background: var(--ink);
+  padding: 40px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.footer-logo { display: flex; align-items: center; gap: 10px; }
+.footer-logo span {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px; font-weight: 600; color: #fff;
+}
+.footer-logo span em { color: var(--p-m); font-style: normal; }
+.footer-r { font-size: 12px; color: rgba(255,255,255,0.45); }
+
+/* ── ANIMATIONS ── */
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.65s ease, transform 0.65s ease; }
+.reveal.in { opacity: 1; transform: none; }
+.reveal.d1 { transition-delay: 0.1s; }
+.reveal.d2 { transition-delay: 0.2s; }
+.reveal.d3 { transition-delay: 0.3s; }
+.reveal.d4 { transition-delay: 0.4s; }
+
+/* ── MOBILE ── */
+@media (max-width: 860px) {
+  nav { padding: 0 20px; }
+  .hero { padding: 100px 20px 64px; }
+  .section-inner { padding: 0 20px; }
+  .how-head { grid-template-columns: 1fr; gap: 16px; }
+  .steps-grid { grid-template-columns: 1fr 1fr; }
+  .benefits-grid { grid-template-columns: 1fr; }
+  .form-wrap { grid-template-columns: 1fr; gap: 40px; }
+  .fgrid { grid-template-columns: 1fr; }
+  footer { padding: 28px 20px; flex-direction: column; gap: 12px; text-align: center; }
+  .proof-strip { padding: 16px 20px; gap: 16px; }
+}
+@media (max-width: 560px) {
+  .steps-grid { grid-template-columns: 1fr; }
+  .stats-bar { flex-direction: column; border-radius: 16px; }
+  .stat-item { border-right: none; border-bottom: 1px solid var(--bdr); }
+  .stat-item:last-child { border-bottom: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-mark">✂️</div>
+    Cut <span>Me</span>
+  </a>
+  <a href="#formulario" class="nav-cta">Quiero unirme</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero reveal">
+  <div class="hero-badge">Para profesionales de la belleza</div>
+  <h1>
+    Tu talento merece<br>
+    más <em>clientes</em>
+  </h1>
+  <p class="hero-desc">
+    Únete a la plataforma que conecta profesionales de belleza y bienestar con clientes que buscan exactamente lo que tú ofreces — en estudio o a domicilio.
+  </p>
+  <div class="hero-actions">
+    <a href="#formulario" class="btn-main">Solicitar acceso gratuito →</a>
+    <a href="#como" class="btn-ghost">¿Cómo funciona? ↓</a>
+  </div>
+  <div class="stats-bar">
+    <div class="stat-item">
+      <div class="stat-n">+2<span>K</span></div>
+      <div class="stat-l">Clientes activos</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-n">4.8<span>★</span></div>
+      <div class="stat-l">Rating promedio</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-n">0<span>%</span></div>
+      <div class="stat-l">Comisión el 1er mes</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROOF STRIP -->
+<div class="proof-strip">
+  <div class="proof-item"><span class="proof-icon">✅</span> Verificación en 48 horas</div>
+  <div class="proof-item"><span class="proof-icon">💳</span> Pagos cada viernes</div>
+  <div class="proof-item"><span class="proof-icon">📱</span> Agenda desde el celular</div>
+  <div class="proof-item"><span class="proof-icon">🚗</span> Estudio o domicilio</div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="como">
+  <div class="section-inner">
+    <div class="how-head reveal">
+      <div>
+        <div class="eyebrow">Proceso</div>
+        <h2 class="section-h2">Empezar es<br><em>muy simple</em></h2>
+      </div>
+      <p>Desde tu solicitud hasta recibir tu primera cita, todo está diseñado para que puedas enfocarte en lo que mejor sabes hacer: tu trabajo.</p>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card reveal d1">
+        <div class="step-num">01</div>
+        <div class="step-icon" style="background:var(--p-l);">📝</div>
+        <h3>Completa tu perfil</h3>
+        <p>Cuéntanos tus especialidades, experiencia y disponibilidad. Tu perfil es tu vitrina ante miles de clientes.</p>
+      </div>
+      <div class="step-card reveal d2">
+        <div class="step-num">02</div>
+        <div class="step-icon" style="background:var(--t-l);">✅</div>
+        <h3>Verificación rápida</h3>
+        <p>Revisamos tu solicitud en 48 horas. Sin burocracia, sin trámites complicados, sin esperas.</p>
+      </div>
+      <div class="step-card reveal d3">
+        <div class="step-num">03</div>
+        <div class="step-icon" style="background:var(--pk-l);">💼</div>
+        <h3>Publica tus servicios</h3>
+        <p>Define precios, duración y modalidad. Estudio o domicilio. Tú controlas tu oferta completamente.</p>
+      </div>
+      <div class="step-card reveal d4">
+        <div class="step-num">04</div>
+        <div class="step-icon" style="background:var(--a-l);">💰</div>
+        <h3>Cobra sin fricción</h3>
+        <p>Pagos procesados automáticamente. Retira tus fondos cada viernes directamente a tu cuenta.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BENEFITS -->
+<section class="benefits">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="eyebrow">Por qué elegirnos</div>
+      <h2 class="section-h2">Todo lo que necesitas<br><em>en un solo lugar</em></h2>
+    </div>
+    <div class="benefits-grid">
+      <div class="benefit reveal d1">
+        <span class="benefit-icon">📅</span>
+        <h3>Agenda inteligente</h3>
+        <p>Gestiona tu disponibilidad por día y hora. Los clientes solo ven los horarios que tú habilitas. Sin sorpresas ni conflictos.</p>
+        <div class="benefit-num">01</div>
+      </div>
+      <div class="benefit reveal d2">
+        <span class="benefit-icon">🚗</span>
+        <h3>Estudio o domicilio</h3>
+        <p>Ofrece ambas modalidades con precios diferenciados. Define tu radio de cobertura y el costo de traslado. Tú pones las reglas.</p>
+        <div class="benefit-num">02</div>
+      </div>
+      <div class="benefit reveal d3">
+        <span class="benefit-icon">⭐</span>
+        <h3>Reputación que trabaja</h3>
+        <p>Las reseñas verificadas construyen tu reputación. Un buen rating te posiciona en los primeros lugares del catálogo automáticamente.</p>
+        <div class="benefit-num">03</div>
+      </div>
+      <div class="benefit reveal d4">
+        <span class="benefit-icon">💳</span>
+        <h3>Pagos garantizados</h3>
+        <p>Cobra por adelantado. Retira tus ganancias cada viernes. Sin retenciones arbitrarias, sin esperas, sin letra chica.</p>
+        <div class="benefit-num">04</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="eyebrow">Testimonios</div>
+      <h2 class="section-h2">Lo que dicen<br><em>nuestros profesionales</em></h2>
+    </div>
+  </div>
+  <div class="track-wrap">
+    <div class="track" id="track">
+      <div class="tcard"><div class="tcard-stars">★★★★★</div><div class="tcard-quote">"Duplicé mis ingresos en 3 meses. Los clientes llegan solos y yo solo me preocupo de hacer mi trabajo."</div><div class="tcard-author"><div class="tcard-ava" style="background:#7B5EA7;">VR</div><div><div class="tcard-name">Valentina R.</div><div class="tcard-role">Colorista · Providencia</div></div></div></div>
+      <div class="tcard"><div class="tcard-stars">★★★★★</div><div class="tcard-quote">"La modalidad domicilio me abrió un mercado completamente nuevo. Cobro más y trabajo en mis horarios."</div><div class="tcard-author"><div class="tcard-ava" style="background:#D4547A;">CF</div><div><div class="tcard-name">Camila F.</div><div class="tcard-role">Manicurista · Ñuñoa</div></div></div></div>
+      <div class="tcard"><div class="tcard-stars">★★★★★</div><div class="tcard-quote">"Por primera vez siento que tengo el control de mi agenda y mis precios. Es exactamente lo que quería."</div><div class="tcard-author"><div class="tcard-ava" style="background:#2A9D8F;">RM</div><div><div class="tcard-name">Roberto M.</div><div class="tcard-role">Barbero · Las Condes</div></div></div></div>
+      <div class="tcard"><div class="tcard-stars">★★★★★</div><div class="tcard-quote">"El sistema de pagos es impecable. Cada viernes tengo mi plata sin tener que pedirla ni recordarla."</div><div class="tcard-author"><div class="tcard-ava" style="background:#E9A84C;">DP</div><div><div class="tcard-name">Daniela P.</div><div class="tcard-role">Maquilladora · Santiago</div></div></div></div>
+      <div class="tcard"><div class="tcard-stars">★★★★★</div><div class="tcard-quote">"Empecé con 2 servicios y hoy tengo agenda llena hasta el próximo mes. No lo puedo creer todavía."</div><div class="tcard-author"><div class="tcard-ava" style="background:#7B5EA7;">AM</div><div><div class="tcard-name">Andrea M.</div><div class="tcard-role">Esteticista · Vitacura</div></div></div></div>
+      <div class="tcard"><div class="tcard-stars">★★★★★</div><div class="tcard-quote">"Mis clientes me dejan reseñas increíbles y eso me trae más clientes. Es un círculo virtuoso perfecto."</div><div class="tcard-author"><div class="tcard-ava" style="background:#D4547A;">KL</div><div><div class="tcard-name">Karina L.</div><div class="tcard-role">Masajista · Ñuñoa</div></div></div></div>
+      <!-- duplicate for seamless loop -->
+      <div class="tcard"><div class="tcard-stars">★★★★★</div><div class="tcard-quote">"Duplicé mis ingresos en 3 meses. Los clientes llegan solos y yo solo me preocupo de hacer mi trabajo."</div><div class="tcard-author"><div class="tcard-ava" style="background:#7B5EA7;">VR</div><div><div class="tcard-name">Valentina R.</div><div class="tcard-role">Colorista · Providencia</div></div></div></div>
+      <div class="tcard"><div class="tcard-stars">★★★★★</div><div class="tcard-quote">"La modalidad domicilio me abrió un mercado completamente nuevo. Cobro más y trabajo en mis horarios."</div><div class="tcard-author"><div class="tcard-ava" style="background:#D4547A;">CF</div><div><div class="tcard-name">Camila F.</div><div class="tcard-role">Manicurista · Ñuñoa</div></div></div></div>
+      <div class="tcard"><div class="tcard-stars">★★★★★</div><div class="tcard-quote">"Por primera vez siento que tengo el control de mi agenda y mis precios. Es exactamente lo que quería."</div><div class="tcard-author"><div class="tcard-ava" style="background:#2A9D8F;">RM</div><div><div class="tcard-name">Roberto M.</div><div class="tcard-role">Barbero · Las Condes</div></div></div></div>
+      <div class="tcard"><div class="tcard-stars">★★★★★</div><div class="tcard-quote">"El sistema de pagos es impecable. Cada viernes tengo mi plata sin tener que pedirla ni recordarla."</div><div class="tcard-author"><div class="tcard-ava" style="background:#E9A84C;">DP</div><div><div class="tcard-name">Daniela P.</div><div class="tcard-role">Maquilladora · Santiago</div></div></div></div>
+      <div class="tcard"><div class="tcard-stars">★★★★★</div><div class="tcard-quote">"Empecé con 2 servicios y hoy tengo agenda llena hasta el próximo mes. No lo puedo creer todavía."</div><div class="tcard-author"><div class="tcard-ava" style="background:#7B5EA7;">AM</div><div><div class="tcard-name">Andrea M.</div><div class="tcard-role">Esteticista · Vitacura</div></div></div></div>
+      <div class="tcard"><div class="tcard-stars">★★★★★</div><div class="tcard-quote">"Mis clientes me dejan reseñas increíbles y eso me trae más clientes. Es un círculo virtuoso perfecto."</div><div class="tcard-author"><div class="tcard-ava" style="background:#D4547A;">KL</div><div><div class="tcard-name">Karina L.</div><div class="tcard-role">Masajista · Ñuñoa</div></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SPECIALTIES -->
+<section class="specialties">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="eyebrow">Especialidades</div>
+      <h2 class="section-h2">¿En qué eres <em>experta/o</em>?</h2>
+      <p style="font-size:15px;color:var(--ink2);margin-top:10px;margin-bottom:0;">Trabaja en la categoría que dominas — o en todas ellas.</p>
+    </div>
+    <div class="cat-wrap reveal">
+      <div class="cat-pill active" onclick="this.classList.toggle('active')">✂️ Peluquería</div>
+      <div class="cat-pill" onclick="this.classList.toggle('active')">💅 Uñas</div>
+      <div class="cat-pill" onclick="this.classList.toggle('active')">💄 Maquillaje</div>
+      <div class="cat-pill" onclick="this.classList.toggle('active')">✨ Tratamientos faciales</div>
+      <div class="cat-pill" onclick="this.classList.toggle('active')">💆 Masajes</div>
+      <div class="cat-pill" onclick="this.classList.toggle('active')">☀️ Bronceado</div>
+      <div class="cat-pill" onclick="this.classList.toggle('active')">🌿 Depilación</div>
+      <div class="cat-pill" onclick="this.classList.toggle('active')">👁️ Extensiones de pestañas</div>
+      <div class="cat-pill" onclick="this.classList.toggle('active')">🪄 Microblading</div>
+      <div class="cat-pill" onclick="this.classList.toggle('active')">💋 Maquillaje de novia</div>
+    </div>
+  </div>
+</section>
+
+<!-- FORM -->
+<section class="form-section" id="formulario">
+  <div class="section-inner">
+    <div class="form-wrap">
+
+      <!-- Left copy -->
+      <div class="form-left reveal">
+        <div class="eyebrow">Únete</div>
+        <h2 class="section-h2" style="margin-bottom:20px;">¿Lista/o para<br><em>dar el salto</em>?</h2>
+        <p>Completa el formulario y nuestro equipo te contactará en menos de 48 horas para guiarte en el proceso de incorporación.</p>
+        <div class="trust-list">
+          <div class="trust-item">
+            <div class="trust-ico">🔒</div>
+            <div>
+              <strong>Verificación sin burocracia</strong>
+              <span>Solo necesitamos tus datos básicos y una muestra de tu trabajo.</span>
+            </div>
+          </div>
+          <div class="trust-item">
+            <div class="trust-ico">🎁</div>
+            <div>
+              <strong>0% comisión el primer mes</strong>
+              <span>Prueba la plataforma sin riesgo. Después, solo el 12% por cita completada.</span>
+            </div>
+          </div>
+          <div class="trust-item">
+            <div class="trust-ico">📞</div>
+            <div>
+              <strong>Onboarding personalizado</strong>
+              <span>Un ejecutivo te ayuda a configurar tu perfil y primeros servicios.</span>
+            </div>
+          </div>
+          <div class="trust-item">
+            <div class="trust-ico">💰</div>
+            <div>
+              <strong>Pagos garantizados cada viernes</strong>
+              <span>Tus ganancias liberadas automáticamente, sin trámites adicionales.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right form -->
+      <div class="form-card reveal d2">
+        <div id="form-body">
+          <div class="counter">
+            <div class="counter-dot"></div>
+            <span id="ctr">Cargando…</span>
+          </div>
+          <div class="form-title">Solicitud de acceso</div>
+          <div class="form-sub">Sin compromisos. Te contactamos en 48 horas.</div>
+
+          <div class="fgrp">
+            <label class="flbl">Nombre completo *</label>
+            <input class="finp" id="fn" type="text" placeholder="María González" autocomplete="name">
+          </div>
+          <div class="fgrid">
+            <div class="fgrp">
+              <label class="flbl">Email *</label>
+              <input class="finp" id="fe" type="email" placeholder="tu@email.com">
+            </div>
+            <div class="fgrp">
+              <label class="flbl">Teléfono *</label>
+              <input class="finp" id="ft" type="tel" placeholder="+56 9 1234 5678">
+            </div>
+          </div>
+          <div class="fgrid">
+            <div class="fgrp">
+              <label class="flbl">Ciudad *</label>
+              <select class="finp" id="fc">
+                <option value="">Seleccionar</option>
+                <option>Santiago</option><option>Providencia</option>
+                <option>Las Condes</option><option>Ñuñoa</option>
+                <option>Vitacura</option><option>Maipú</option>
+                <option>La Florida</option><option>Otra</option>
+              </select>
+            </div>
+            <div class="fgrp">
+              <label class="flbl">Años de experiencia *</label>
+              <select class="finp" id="fexp">
+                <option value="">Seleccionar</option>
+                <option>Menos de 1 año</option><option>1 – 2 años</option>
+                <option>3 – 5 años</option><option>6 – 10 años</option>
+                <option>Más de 10 años</option>
+              </select>
+            </div>
+          </div>
+          <div class="fgrp">
+            <label class="flbl">Modalidad preferida *</label>
+            <select class="finp" id="fmod">
+              <option value="">Seleccionar</option>
+              <option>Solo en mi estudio</option>
+              <option>Solo a domicilio</option>
+              <option>Ambas modalidades</option>
+            </select>
+          </div>
+          <div class="fgrp">
+            <label class="flbl">Mis especialidades * (selecciona al menos una)</label>
+            <div class="spec-grid" id="specs">
+              <div class="spec-pill" onclick="this.classList.toggle('on')">✂️ Peluquería</div>
+              <div class="spec-pill" onclick="this.classList.toggle('on')">💅 Uñas</div>
+              <div class="spec-pill" onclick="this.classList.toggle('on')">💄 Maquillaje</div>
+              <div class="spec-pill" onclick="this.classList.toggle('on')">✨ Facial</div>
+              <div class="spec-pill" onclick="this.classList.toggle('on')">💆 Masajes</div>
+              <div class="spec-pill" onclick="this.classList.toggle('on')">☀️ Bronceado</div>
+              <div class="spec-pill" onclick="this.classList.toggle('on')">🌿 Depilación</div>
+              <div class="spec-pill" onclick="this.classList.toggle('on')">👁️ Pestañas</div>
+              <div class="spec-pill" onclick="this.classList.toggle('on')">🪄 Microblading</div>
+            </div>
+          </div>
+          <div class="fgrp">
+            <label class="flbl">¿Cómo nos encontraste?</label>
+            <select class="finp" id="fsrc">
+              <option value="">Opcional</option>
+              <option>Instagram</option><option>TikTok</option>
+              <option>Recomendación de un colega</option>
+              <option>Google</option><option>Facebook</option><option>Otro</option>
+            </select>
+          </div>
+          <div class="fgrp">
+            <label class="flbl">Cuéntanos sobre ti (opcional)</label>
+            <textarea class="finp" id="fbio" rows="3"
+              placeholder="Tu experiencia, logros, estilo de trabajo…"
+              style="resize:vertical;min-height:80px;"></textarea>
+          </div>
+          <!-- reCAPTCHA v2 checkbox — Replace data-sitekey with your real key -->
+          <div class="g-recaptcha"
+               data-sitekey="TU_SITE_KEY_V2"
+               data-theme="light"
+               data-size="normal"
+               style="margin-bottom:12px;transform-origin:left top;"></div>
+          <button class="f-submit" id="fsubmit" onclick="enviar()">Enviar solicitud →</button>
+          <div class="f-legal">
+            Al enviar aceptas nuestros <a href="#">Términos de uso</a> y <a href="#">Política de privacidad</a>. No compartimos tu información con terceros.<br>Este sitio está protegido por reCAPTCHA. <a href="https://policies.google.com/privacy" target="_blank">Privacidad</a> y <a href="https://policies.google.com/terms" target="_blank">Términos</a> de Google.
+          </div>
+        </div>
+
+        <div class="success" id="success">
+          <div class="success-ico">✓</div>
+          <h3>¡Solicitud recibida!</h3>
+          <p>Revisaremos tu perfil y te contactaremos en las próximas <strong>48 horas</strong>.<br>Mientras tanto, sigue haciendo lo que mejor sabes. ✨</p>
+          <div class="success-ref">
+            <div class="success-ref-l">ID de solicitud</div>
+            <div class="success-ref-n" id="refid">—</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">
+    <div class="nav-logo-mark" style="width:30px;height:30px;font-size:14px;">✂️</div>
+    <span>Cut <em>Me</em></span>
+  </div>
+  <div class="footer-r">© 2025 Cut Me App · Todos los derechos reservados</div>
+</footer>
+
+<script>
+// Intersection Observer — reveal on scroll
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); obs.unobserve(e.target); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+// Live counter
+let count = 147;
+const ctrEl = document.getElementById('ctr');
+function updateCtr(){ ctrEl.textContent = `${count} profesionales en lista de espera`; }
+updateCtr();
+setInterval(() => { if(Math.random() > 0.65){ count++; updateCtr(); } }, 4200);
+
+// Validate email
+const validEmail = e => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
+
+// Shake invalid field
+function shake(id){
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.style.borderColor = 'var(--pk)';
+  el.style.boxShadow = '0 0 0 3px rgba(212,84,122,0.15)';
+  el.animate([
+    {transform:'translateX(0)'},{transform:'translateX(-5px)'},
+    {transform:'translateX(5px)'},{transform:'translateX(-4px)'},
+    {transform:'translateX(4px)'},{transform:'translateX(0)'}
+  ], {duration:350,easing:'ease-out'}).onfinish = () => {
+    el.style.borderColor=''; el.style.boxShadow='';
+  };
+  el.focus();
+}
+
+function enviar(){
+  const name = document.getElementById('fn').value.trim();
+  const email = document.getElementById('fe').value.trim();
+  const tel   = document.getElementById('ft').value.trim();
+  const city  = document.getElementById('fc').value;
+  const exp   = document.getElementById('fexp').value;
+  const mod   = document.getElementById('fmod').value;
+  const specs = [...document.querySelectorAll('#specs .spec-pill.on')].map(s=>s.textContent.trim());
+
+  if(!name)              { shake('fn'); return; }
+  if(!validEmail(email)) { shake('fe'); return; }
+  if(!tel)               { shake('ft'); return; }
+  if(!city)              { shake('fc'); return; }
+  if(!exp)               { shake('fexp'); return; }
+  if(!mod)               { shake('fmod'); return; }
+  // reCAPTCHA v2 — verify user completed the checkbox
+  const captchaResp = typeof grecaptcha!=='undefined' ? grecaptcha.getResponse() : 'dev-mode';
+  if(!captchaResp){
+    const box = document.querySelector('.g-recaptcha');
+    if(box){ box.style.outline='2px solid var(--pk,#D4547A)'; box.style.borderRadius='4px'; }
+    setTimeout(()=>{ const b=document.querySelector('.g-recaptcha'); if(b)b.style.outline=''; },2000);
+    return;
+  }
+
+  if(!specs.length){
+    const grid = document.getElementById('specs');
+    grid.animate([{outline:'3px solid transparent'},{outline:'3px solid var(--pk)'},{outline:'3px solid transparent'}],{duration:600});
+    return;
+  }
+
+  const btn = document.getElementById('fsubmit');
+  btn.textContent = 'Enviando…'; btn.disabled = true;
+
+  setTimeout(() => {
+    const ref = 'CM-' + Date.now().toString(36).toUpperCase().slice(-6);
+    document.getElementById('refid').textContent = ref;
+    if(typeof grecaptcha!=='undefined') grecaptcha.reset();
+    document.getElementById('form-body').style.display = 'none';
+    document.getElementById('success').style.display = 'block';
+    count++; updateCtr();
+    console.log('Lead:', { name, email, tel, city, exp, mod, specs,
+      source: document.getElementById('fsrc').value,
+      bio: document.getElementById('fbio').value.trim(),
+      ref, ts: new Date().toISOString() });
+  }, 1100);
+}
+
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const t = document.querySelector(a.getAttribute('href'));
+    if(t){ e.preventDefault(); t.scrollIntoView({behavior:'smooth'}); }
+  });
+});
+</script>
+</body>
+</html>

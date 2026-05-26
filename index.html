@@ -1,0 +1,1891 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cut Me App</title>
+<!-- reCAPTCHA v3 — invisible, score-based -->
+<script src="https://www.google.com/recaptcha/api.js?render=TU_SITE_KEY_V3" async defer></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --purple:#7B5EA7;--purple-light:#EDE9F6;--purple-dark:#4A3570;
+  --pink:#D4547A;--pink-light:#FAEEF3;
+  --teal:#2A9D8F;--teal-light:#E0F5F3;
+  --amber:#E9A84C;--amber-light:#FDF3E3;
+  --red:#E05252;--red-light:#FDECEC;
+  --green:#3B9E6A;--green-light:#E5F5ED;
+  --blue:#3B7DD8;--blue-light:#E8F0FC;
+  --bg:#F6F4FB;--surface:#FFFFFF;
+  --border:rgba(123,94,167,0.12);--border2:rgba(123,94,167,0.22);
+  --text:#1A1228;--text-2:#6B5F82;--text-3:#9E94B0;
+  --r:14px;--rs:8px;
+  --sh:0 2px 16px rgba(123,94,167,0.08);
+  --shlg:0 8px 32px rgba(123,94,167,0.14);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+
+/* ── TOPBAR ── */
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:58px;position:sticky;top:0;z-index:50;}
+.logo{display:flex;align-items:center;gap:10px;}
+.logo-mark{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--purple),var(--pink));display:flex;align-items:center;justify-content:center;font-size:16px;}
+.logo-txt{font-family:'Syne',sans-serif;font-size:17px;font-weight:700;color:var(--text);}
+.logo-txt span{color:var(--purple);}
+.hbg{width:38px;height:38px;border:1px solid var(--border);background:var(--surface);border-radius:10px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;}
+.hbg span{display:block;width:15px;height:1.5px;background:var(--text-2);border-radius:2px;}
+.upill{display:flex;align-items:center;gap:8px;padding:5px 12px 5px 5px;border:1px solid var(--border);border-radius:24px;cursor:pointer;background:var(--surface);}
+.ava{width:28px;height:28px;border-radius:50%;background:var(--purple-light);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:var(--purple);font-family:'Syne',sans-serif;}
+.lbtn{padding:7px 18px;border-radius:24px;border:1px solid var(--purple);background:transparent;font-size:13px;font-weight:500;color:var(--purple);cursor:pointer;font-family:'DM Sans',sans-serif;}
+
+/* ── DRAWER ── */
+.ov{position:fixed;inset:0;background:rgba(26,18,40,0.4);z-index:100;opacity:0;pointer-events:none;transition:opacity 0.25s;}
+.ov.open{opacity:1;pointer-events:all;}
+.drawer{position:fixed;top:0;left:0;bottom:0;width:300px;background:var(--surface);z-index:101;transform:translateX(-100%);transition:transform 0.28s cubic-bezier(0.4,0,0.2,1);display:flex;flex-direction:column;box-shadow:4px 0 40px rgba(123,94,167,0.15);}
+.drawer.open{transform:translateX(0);}
+.dh{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.dclose{width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:none;cursor:pointer;font-size:16px;color:var(--text-3);display:flex;align-items:center;justify-content:center;}
+.db{flex:1;overflow-y:auto;padding:12px 0;}
+.ucard{margin:0 14px 8px;padding:12px 14px;background:var(--purple-light);border-radius:var(--rs);display:flex;align-items:center;gap:10px;}
+.ucardava{width:40px;height:40px;border-radius:50%;background:var(--purple);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;color:white;font-family:'Syne',sans-serif;flex-shrink:0;}
+.ni{display:flex;align-items:center;gap:10px;padding:10px 20px;cursor:pointer;font-size:14px;color:var(--text-2);border-left:2px solid transparent;transition:all 0.15s;}
+.ni:hover{background:var(--purple-light);color:var(--purple);}
+.ni.act{background:var(--purple-light);color:var(--purple);border-left-color:var(--purple);font-weight:500;}
+.ni.danger:hover{background:var(--red-light);color:var(--red);border-left-color:var(--red);}
+.nsep{height:1px;background:var(--border);margin:8px 20px;}
+.ngrp{padding:4px 20px 2px;font-size:10px;font-weight:600;color:var(--text-3);letter-spacing:0.08em;text-transform:uppercase;}
+
+/* ── AUTH FORMS ── */
+.dtabs{display:flex;border-bottom:1px solid var(--border);margin:0 20px 16px;}
+.dtab{flex:1;padding:10px 8px;font-size:13px;cursor:pointer;border-bottom:2px solid transparent;text-align:center;color:var(--text-3);transition:all 0.2s;margin-bottom:-1px;}
+.dtab.act{color:var(--purple);border-bottom-color:var(--purple);font-weight:500;}
+.fi{padding:0 20px;}
+.f{margin-bottom:12px;}
+.lb{font-size:12px;color:var(--text-2);margin-bottom:5px;display:block;font-weight:500;}
+.inp{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:var(--rs);font-size:13px;color:var(--text);background:var(--surface);font-family:'DM Sans',sans-serif;transition:border-color 0.2s;}
+.inp:focus{outline:none;border-color:var(--purple);}
+.inp-sel{appearance:none;}
+.topt{flex:1;padding:9px 6px;border:1px solid var(--border);border-radius:var(--rs);text-align:center;cursor:pointer;font-size:12px;color:var(--text-2);background:var(--surface);}
+.topt.act{border-color:var(--purple);background:var(--purple-light);color:var(--purple);font-weight:500;}
+.errmsg{font-size:12px;color:var(--red);margin-top:6px;}
+.hintbox{background:var(--purple-light);border-radius:var(--rs);padding:10px 12px;font-size:11px;color:var(--text-2);margin-top:12px;line-height:1.7;}
+
+/* ── BUTTONS ── */
+.btn{width:100%;padding:11px;border-radius:var(--rs);border:none;font-size:14px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.btn-p{background:linear-gradient(135deg,var(--purple),var(--pink));color:white;}
+.btn-o{background:transparent;color:var(--purple);border:1px solid var(--purple)!important;border-radius:var(--rs)!important;}
+.btn-g{background:linear-gradient(135deg,var(--teal),#1A7A6E);color:white;}
+.btn-r{background:var(--red-light);color:var(--red);}
+.bsm{padding:5px 10px;border-radius:6px;border:none;font-size:11px;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.bsm-p{background:var(--purple-light);color:var(--purple);}
+.bsm-r{background:var(--red-light);color:var(--red);}
+.bsm-g{background:var(--green-light);color:var(--green);}
+.bsm-a{background:var(--amber-light);color:#92400E;}
+.bsm-b{background:var(--blue-light);color:var(--blue);}
+
+/* ── LAYOUT ── */
+.main{max-width:900px;margin:0 auto;padding:24px 20px;}
+.ph{display:flex;align-items:center;gap:10px;margin-bottom:20px;}
+.pbk{width:36px;height:36px;border-radius:10px;border:1px solid var(--border);background:var(--surface);cursor:pointer;font-size:16px;color:var(--text-2);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.ptit{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:20px;margin-bottom:16px;box-shadow:var(--sh);}
+.ctit{font-family:'Syne',sans-serif;font-size:15px;font-weight:600;margin-bottom:14px;color:var(--text);}
+.stit{font-family:'Syne',sans-serif;font-size:16px;font-weight:600;color:var(--text);margin-bottom:14px;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+.badge{display:inline-block;padding:2px 9px;border-radius:12px;font-size:10px;font-weight:600;font-family:'Syne',sans-serif;}
+.bp{background:#FEF3C7;color:#92400E;}
+.bc{background:#D1FAE5;color:#065F46;}
+.br{background:#FEE2E2;color:#991B1B;}
+.bb{background:var(--blue-light);color:var(--blue);}
+.callout{border-radius:10px;padding:12px 14px;font-size:12px;margin-bottom:12px;display:flex;gap:8px;align-items:flex-start;line-height:1.5;}
+.ca{background:var(--amber-light);color:#92400E;}
+.ct{background:var(--teal-light);color:var(--teal);}
+.cb{background:var(--blue-light);color:var(--blue);}
+
+/* ── HOME ── */
+.hero{background:linear-gradient(135deg,var(--purple-dark) 0%,var(--purple) 55%,var(--pink) 100%);border-radius:20px;padding:32px 28px;margin-bottom:28px;color:white;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;right:-40px;top:-40px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,0.06);}
+.heb{font-size:11px;letter-spacing:0.1em;text-transform:uppercase;opacity:0.7;margin-bottom:8px;}
+.het{font-family:'Syne',sans-serif;font-size:28px;font-weight:700;margin-bottom:8px;line-height:1.2;}
+.hed{font-size:14px;opacity:0.8;margin-bottom:20px;max-width:380px;line-height:1.6;}
+.hecta{display:flex;gap:10px;flex-wrap:wrap;}
+.hbw{padding:10px 20px;border-radius:10px;border:none;font-size:13px;font-weight:600;cursor:pointer;background:white;color:var(--purple);font-family:'Syne',sans-serif;}
+.hbt{padding:10px 20px;border-radius:10px;border:1px solid rgba(255,255,255,0.4);font-size:13px;cursor:pointer;background:rgba(255,255,255,0.15);color:white;}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;margin-bottom:20px;scrollbar-width:none;}
+.chips::-webkit-scrollbar{display:none;}
+.chip{flex-shrink:0;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px;cursor:pointer;min-width:120px;text-align:center;}
+.chip:hover{border-color:var(--purple);}
+.cats{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;}
+.catpill{padding:5px 14px;border-radius:20px;font-size:12px;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--text-2);}
+.catpill.act{background:var(--purple);color:white;border-color:var(--purple);}
+.svclist{display:flex;flex-direction:column;gap:8px;}
+.svcrow{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;display:flex;align-items:center;gap:14px;cursor:pointer;}
+.svcrow:hover{border-color:var(--purple);}
+.svcicn{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.svccta{padding:7px 14px;border-radius:8px;border:none;background:var(--purple-light);color:var(--purple);font-size:12px;font-weight:500;cursor:pointer;flex-shrink:0;}
+.svccta:hover{background:var(--purple);color:white;}
+
+/* ── BOOKING STEPS ── */
+.steps{display:flex;align-items:center;margin-bottom:24px;}
+.sdot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;font-family:'Syne',sans-serif;flex-shrink:0;}
+.sdot.done{background:var(--purple);color:white;}
+.sdot.act{background:var(--purple);color:white;box-shadow:0 0 0 4px var(--purple-light);}
+.sdot.pend{background:var(--bg);color:var(--text-3);border:1.5px solid var(--border);}
+.slbl{font-size:11px;color:var(--text-3);}
+.slbl.act{color:var(--purple);font-weight:500;}
+.sline{flex:1;height:1.5px;background:var(--border);margin:0 6px;}
+.sline.done{background:var(--purple);}
+
+/* ── PRO CARDS ── */
+.prolist{display:flex;flex-direction:column;gap:10px;margin-bottom:16px;}
+.procard{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);padding:14px 16px;cursor:pointer;display:flex;align-items:center;gap:14px;}
+.procard:hover{border-color:var(--purple);}
+.procard.sel{border-color:var(--purple);background:var(--purple-light);box-shadow:0 0 0 3px rgba(123,94,167,0.1);}
+.proava{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;font-family:'Syne',sans-serif;color:white;flex-shrink:0;}
+.protag{padding:2px 8px;border-radius:10px;font-size:10px;font-weight:500;}
+.ptE{background:var(--teal-light);color:var(--teal);}
+.ptD{background:var(--amber-light);color:#92400E;}
+.selbadge{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;background:var(--purple);color:white;border-radius:10px;font-size:9px;font-weight:700;font-family:'Syne',sans-serif;margin-left:6px;vertical-align:middle;}
+
+/* ── MODALIDAD ── */
+.modrow{display:flex;gap:10px;margin-bottom:14px;}
+.modopt{flex:1;border:1.5px solid var(--border);border-radius:var(--r);padding:16px 12px;text-align:center;cursor:pointer;background:var(--surface);position:relative;}
+.modopt:hover{border-color:var(--purple);}
+.modopt.act{border-color:var(--purple);background:var(--purple-light);}
+.modopt.dis{opacity:0.4;cursor:not-allowed;pointer-events:none;}
+.modbadge{position:absolute;top:-8px;right:8px;color:white;font-size:9px;font-weight:700;padding:2px 7px;border-radius:8px;font-family:'Syne',sans-serif;}
+.gopt{flex:1;border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center;cursor:pointer;background:var(--surface);}
+.gopt:hover{border-color:var(--purple);}
+.gopt.act{border-color:var(--purple);background:var(--purple-light);}
+.totalbar{background:var(--purple-light);border-radius:10px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+
+/* ── APT ITEMS ── */
+.aptitem{border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;}
+.aptitem.pending{border-left:3px solid var(--amber);background:#FFFBF0;}
+.aptitem.confirmed{border-left:3px solid var(--teal);background:#F0FBF8;}
+.aptitem.rejected{border-left:3px solid var(--red);background:#FFF5F5;}
+.aptitem.done{border-left:3px solid var(--text-3);background:var(--bg);}
+.aptitem.own{border-left:3px solid var(--blue);background:var(--blue-light);}
+.statbox{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center;}
+.statnum{font-size:22px;font-weight:700;font-family:'Syne',sans-serif;}
+.statlbl{font-size:11px;color:var(--text-3);margin-top:3px;}
+
+/* ── WALLET ── */
+.wallet{background:linear-gradient(135deg,var(--teal),#1A7A6E);border-radius:var(--r);padding:20px;margin-bottom:14px;color:white;}
+.wamt{font-family:'Syne',sans-serif;font-size:32px;font-weight:700;margin-bottom:12px;}
+.wstat{flex:1;background:rgba(255,255,255,0.15);border-radius:8px;padding:10px;}
+.wstatn{font-size:18px;font-weight:700;font-family:'Syne',sans-serif;}
+.wstatl{font-size:10px;opacity:0.75;margin-top:2px;}
+.wbtn{background:white;color:var(--teal);border:none;padding:9px 18px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;}
+
+/* ── FEATURED / ADMIN ── */
+.featured-badge{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;background:linear-gradient(135deg,#F59E0B,#F97316);color:white;font-family:'Syne',sans-serif;}
+.featured-ring{border:2px solid #F59E0B!important;box-shadow:0 0 0 3px rgba(245,158,11,0.15);}
+.featured-banner{background:linear-gradient(135deg,#FEF3C7,#FDE68A);border:1px solid #F59E0B;border-radius:10px;padding:8px 12px;font-size:11px;color:#92400E;font-weight:500;display:flex;align-items:center;gap:6px;margin-bottom:8px;}
+.admin-stat{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center;}
+.admin-stat-n{font-size:26px;font-weight:700;font-family:'Syne',sans-serif;}
+.admin-stat-l{font-size:11px;color:var(--text-3);margin-top:3px;}
+/* ── REVIEWS / STARS ── */
+.star-picker{display:flex;gap:4px;margin-bottom:12px;}
+.star-picker span{font-size:28px;cursor:pointer;transition:transform 0.1s;color:#D1D5DB;line-height:1;}
+.star-picker span.on{color:#F59E0B;}
+.star-picker span:hover{transform:scale(1.15);}
+.review-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:10px;}
+.review-stars{color:#F59E0B;font-size:14px;letter-spacing:1px;}
+.review-pending{opacity:0.6;border-style:dashed;}
+.rating-bar{display:flex;align-items:center;gap:8px;margin-bottom:4px;}
+.rating-bar-fill{height:6px;border-radius:3px;background:linear-gradient(90deg,#F59E0B,#F97316);transition:width 0.3s;}
+.rating-bar-bg{flex:1;height:6px;border-radius:3px;background:var(--bg);}
+/* ── SCHEDULE ── */
+.daygrid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:16px;}
+.daycol{border:1px solid var(--border);border-radius:10px;overflow:hidden;}
+.dayhd{padding:8px 6px;text-align:center;font-size:11px;font-weight:600;font-family:'Syne',sans-serif;}
+.dayhd.open{background:var(--purple-light);color:var(--purple);}
+.dayhd.closed{background:var(--bg);color:var(--text-3);}
+.timeslot{padding:5px 4px;text-align:center;font-size:10px;cursor:pointer;transition:all 0.1s;border-top:1px solid var(--border);}
+.timeslot.on{background:var(--purple-light);color:var(--purple);font-weight:500;}
+.timeslot.off{color:var(--text-3);background:var(--surface);}
+.timeslot.blocked{background:var(--red-light);color:var(--red);}
+
+/* ── SERVICE MGMT ── */
+.svcmgmt{display:flex;flex-direction:column;gap:8px;}
+.svcmgmtrow{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:12px;}
+.svcmgmticn{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+
+/* ── CALENDAR WEEK VIEW ── */
+.week-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.week-days{display:grid;grid-template-columns:60px repeat(7,1fr);gap:0;border:1px solid var(--border);border-radius:10px;overflow:hidden;}
+.wdh{padding:8px 4px;text-align:center;font-size:11px;font-weight:600;background:var(--purple-light);color:var(--purple);border-bottom:1px solid var(--border);}
+.wdh.time{background:var(--bg);color:var(--text-3);}
+.wdh.today{background:var(--purple);color:white;}
+.whour{padding:6px 4px;font-size:10px;color:var(--text-3);text-align:right;padding-right:8px;border-top:1px solid var(--border);background:var(--bg);}
+.wcell{border-top:1px solid var(--border);border-left:1px solid var(--border);padding:2px;min-height:30px;cursor:pointer;transition:background 0.1s;}
+.wcell:hover{background:var(--purple-light);}
+.wcell.has-apt{background:var(--teal-light);}
+.wcell.blocked{background:var(--red-light);}
+.wcell.own-apt{background:var(--blue-light);}
+.apt-block{font-size:9px;font-weight:500;padding:2px 4px;border-radius:4px;margin-bottom:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.apt-block.client{background:var(--teal);color:white;}
+.apt-block.own{background:var(--blue);color:white;}
+.apt-block.block{background:var(--red);color:white;}
+
+/* ── CONFIRM ── */
+.confirmwrap{display:flex;align-items:center;justify-content:center;min-height:50vh;}
+.confirmbox{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:40px 32px;text-align:center;max-width:360px;box-shadow:var(--shlg);}
+.empty{text-align:center;padding:40px 20px;color:var(--text-3);font-size:14px;}
+.tbl{width:100%;border-collapse:collapse;font-size:13px;}
+.tbl th{background:var(--purple-light);color:var(--purple);font-weight:600;padding:10px 14px;text-align:left;font-family:'Syne',sans-serif;font-size:12px;}
+.tbl td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--text);}
+.tbl tr:last-child td{border-bottom:none;}
+.tbl tfoot td{background:var(--purple-light);font-weight:600;color:var(--purple);font-family:'Syne',sans-serif;}
+.tblwrap{border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:12px;}
+.toggle2{display:flex;gap:8px;margin-bottom:10px;}
+.tgbtn{flex:1;padding:9px 8px;border:1px solid var(--border);border-radius:8px;text-align:center;cursor:pointer;font-size:12px;}
+.tgon-t{border-color:var(--teal)!important;background:var(--teal-light);color:var(--teal);font-weight:500;}
+.tgon-a{border-color:var(--amber)!important;background:var(--amber-light);color:#92400E;font-weight:500;}
+.tgoff{border-color:var(--red)!important;background:var(--red-light);color:var(--red);}
+
+/* ── TOAST NOTIFICATIONS ── */
+#toast-container{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:9999;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none;}
+.toast{display:flex;align-items:center;gap:10px;padding:12px 20px;border-radius:100px;font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;box-shadow:0 4px 24px rgba(0,0,0,0.15);animation:toast-in 0.3s ease;pointer-events:none;max-width:340px;text-align:center;}
+.toast.info{background:var(--purple);color:white;}
+.toast.ok{background:var(--teal);color:white;}
+.toast.warn{background:var(--amber);color:#1A1228;}
+.toast.err{background:var(--red);color:white;}
+@keyframes toast-in{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+@keyframes toast-out{from{opacity:1;transform:translateY(0);}to{opacity:0;transform:translateY(8px);}}
+</style>
+</head>
+<body>
+<div id="topbar"></div>
+<div id="ov" class="ov" onclick="closeDrawer()"></div>
+<div id="drawer" class="drawer"><div id="dc"></div></div>
+<div id="mc"></div>
+
+<script>
+// ── DATA ─────────────────────────────────────────────────────────────────────
+const ALL_SVCS=[
+  {id:1,name:'Corte de cabello',dur:'30 min',pM:25,pF:35,icon:'✂️',cat:'Peluquería',bg:'#EDE9F6'},
+  {id:2,name:'Peinado',dur:'60 min',pM:35,pF:45,icon:'💇',cat:'Peluquería',bg:'#EDE9F6'},
+  {id:3,name:'Coloración',dur:'120 min',pM:70,pF:90,icon:'🎨',cat:'Peluquería',bg:'#EDE9F6'},
+  {id:4,name:'Manicure',dur:'45 min',pM:20,pF:25,icon:'💅',cat:'Uñas',bg:'#FAEEF3'},
+  {id:5,name:'Pedicure',dur:'60 min',pM:30,pF:35,icon:'🌸',cat:'Uñas',bg:'#FAEEF3'},
+  {id:6,name:'Maquillaje social',dur:'90 min',pM:50,pF:60,icon:'💄',cat:'Belleza',bg:'#FAEEF3'},
+  {id:7,name:'Tratamiento facial',dur:'75 min',pM:50,pF:55,icon:'✨',cat:'Belleza',bg:'#E0F5F3'},
+  {id:8,name:'Bronceado natural',dur:'30 min',pM:30,pF:35,icon:'☀️',cat:'Bronceado',bg:'#FDF3E3'},
+  {id:9,name:'Bronceado spray',dur:'45 min',pM:45,pF:50,icon:'🌅',cat:'Bronceado',bg:'#FDF3E3'},
+  {id:10,name:'Masaje relajante',dur:'60 min',pM:55,pF:60,icon:'💆',cat:'Masajes',bg:'#E0F5F3'},
+  {id:11,name:'Depilación facial',dur:'30 min',pM:15,pF:20,icon:'🌿',cat:'Depilación',bg:'#E5F5ED'},
+  {id:12,name:'Extensiones pestañas',dur:'90 min',pM:0,pF:70,icon:'👁️',cat:'Belleza',bg:'#FAEEF3'}
+];
+const DAYS=['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
+const DAYSFULL=['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
+const ALLHRS=['08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00'];
+const CAT_OPTS=['Peluquería','Uñas','Belleza','Bronceado','Masajes','Depilación'];
+const ICON_OPTS=['✂️','💇','🎨','💅','🌸','💄','✨','☀️','🌅','💆','🌿','👁️','💋','🪄'];
+
+const PROS=[
+  {id:1,name:'Valentina Rojas',bio:'Especialista en coloración y técnicas modernas',avatar:'VR',color:'#7B5EA7',rating:4.9,reviews:128,
+   svcIds:[1,2,3,4,5,6,7,8,9],
+   modalities:{estudio:{on:true,address:'Av. Providencia 1234, Piso 3'},domicilio:{on:true,surcharge:5000,maxKm:10}},
+   schedule:{0:{on:true,hrs:['09:00','10:00','11:00','12:00','14:00','15:00','16:00','17:00','18:00']},1:{on:true,hrs:['09:00','10:00','11:00','12:00','14:00','15:00','16:00','17:00','18:00']},2:{on:true,hrs:['09:00','10:00','11:00','12:00','14:00','15:00','16:00','17:00','18:00']},3:{on:true,hrs:['09:00','10:00','11:00','12:00','14:00','15:00','16:00','17:00','18:00']},4:{on:true,hrs:['09:00','10:00','11:00','12:00','14:00','15:00','16:00','17:00']},5:{on:true,hrs:['10:00','11:00','12:00','13:00','14:00']},6:{on:false,hrs:[]}},
+   blocks:[]
+  },
+  {id:2,name:'Camila Fuentes',bio:'Manicurista certificada, uñas y tratamientos',avatar:'CF',color:'#D4547A',rating:4.7,reviews:84,svcIds:[4,5,6,7],modalities:{estudio:{on:true,address:'Belgrano 456, Ñuñoa'},domicilio:{on:false,surcharge:0,maxKm:0}},schedule:{0:{on:true,hrs:['10:00','11:00','12:00','14:00','15:00','16:00']},1:{on:true,hrs:['10:00','11:00','12:00','14:00','15:00','16:00']},2:{on:true,hrs:['10:00','11:00','12:00','14:00','15:00','16:00']},3:{on:true,hrs:['10:00','11:00','12:00','14:00','15:00','16:00']},4:{on:true,hrs:['10:00','11:00','12:00','14:00','15:00']},5:{on:false,hrs:[]},6:{on:false,hrs:[]}},blocks:[]},
+  {id:3,name:'Roberto Mena',bio:'Barbero y estilista masculino, 10 años de exp.',avatar:'RM',color:'#2A9D8F',rating:4.8,reviews:201,svcIds:[1,2,3,8,9],modalities:{estudio:{on:true,address:'Los Leones 789, Providencia'},domicilio:{on:true,surcharge:8000,maxKm:8}},schedule:{0:{on:true,hrs:['09:00','10:00','11:00','12:00','14:00','15:00','16:00','17:00','18:00']},1:{on:true,hrs:['09:00','10:00','11:00','12:00','14:00','15:00','16:00','17:00','18:00']},2:{on:true,hrs:['09:00','10:00','11:00','12:00','14:00','15:00','16:00','17:00','18:00']},3:{on:true,hrs:['09:00','10:00','11:00','12:00','14:00','15:00','16:00','17:00','18:00']},4:{on:true,hrs:['09:00','10:00','11:00','12:00','14:00','15:00','16:00','17:00']},5:{on:true,hrs:['10:00','11:00','12:00','13:00']},6:{on:false,hrs:[]}},blocks:[]},
+  {id:4,name:'Daniela Pérez',bio:'Maquilladora artística y tratamientos faciales',avatar:'DP',color:'#E9A84C',rating:4.6,reviews:56,svcIds:[6,7,8,9],modalities:{estudio:{on:false,address:''},domicilio:{on:true,surcharge:4000,maxKm:15}},schedule:{0:{on:true,hrs:['10:00','11:00','12:00','14:00','15:00','16:00']},1:{on:true,hrs:['10:00','11:00','12:00','14:00','15:00','16:00']},2:{on:true,hrs:['10:00','11:00','12:00','14:00','15:00','16:00']},3:{on:true,hrs:['10:00','11:00','12:00','14:00','15:00','16:00']},4:{on:false,hrs:[]},5:{on:false,hrs:[]},6:{on:false,hrs:[]}},blocks:[]}
+];
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+const S={
+  view:'home',drawerOpen:false,drawerTab:'login',
+  user:null,
+  users:[
+    {id:1,name:'Cliente Demo',email:'cliente@demo.com',password:'123456',phone:'+56912345678',type:'client'},
+    {id:2,name:'Valentina Rojas',email:'pro@demo.com',password:'123456',phone:'+56987654321',type:'professional',proId:1},
+    {id:3,name:'Super Admin',email:'admin@cutme.com',password:'admin123',phone:'',type:'admin'}
+  ],
+  appointments:[],
+  reviews:[],
+  withdrawals:[],  // {id,proId,proName,amount,status,requestDate,paidDate}
+  featuredSvcIds:[1,4],
+  featuredProIds:[1],
+  selectedCat:'Todos',
+  adminTab:'overview',
+  // booking flow
+  bStep:1,selSvc:null,selPro:null,selMod:null,clientAddr:'',
+  form:{name:'',phone:'',email:'',date:'',time:'',gender:'',notes:''},
+  editingId:null,
+  // login forms
+  lf:{email:'',password:'',error:''},
+  rf:{name:'',email:'',password:'',confirm:'',phone:'',type:'client',error:''},
+  // pro sub-tabs
+  proTab:'dash', // dash | citas | servicios | agenda | config
+  // FIX 13: each pro's services live in state, not in global ALL_SVCS
+  proServices:{}, // {proId: [{id,name,dur,pM,pF,icon,cat,bg}]}
+  aptFilter:'all', // all | pending | confirmed | own
+  // pro service management
+  newSvc:{name:'',dur:'',pM:'',pF:'',cat:'',icon:'✂️'},
+  editSvcId:null,
+  // agenda
+  agendaWeek:0, // offset from current week
+  blockForm:{date:'',from:'',to:'',reason:''},
+  // own-booking form (pro books for client)
+  ownBooking:{proSvcId:'',date:'',time:'',clientName:'',clientPhone:'',gender:'',notes:''},
+  citasSubTab:'como-cliente',
+  // billing
+  billing:{fullName:'',rut:'',phone:'',email:'',saved:false},
+  selMonth:new Date().toISOString().slice(0,7)
+};
+
+// ── HELPERS ──────────────────────────────────────────────────────────────────
+// FIX 15: XSS sanitizer for user-supplied strings in innerHTML
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+
+// FIX 14: collision-safe unique ID (Date.now + random suffix)
+let _uidSeq=0;
+const uid=()=>Date.now().toString(36)+'-'+(++_uidSeq).toString(36)+Math.random().toString(36).slice(2,5);
+const ini=n=>n.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+const fp=n=>'$'+Number(n).toLocaleString('es-CL');
+const stars=r=>'★'.repeat(Math.floor(r))+'☆'.repeat(5-Math.floor(r));
+const gp=(s,g)=>g==='male'?s.pM:s.pF;
+const calcTotal=(base,pro,mod)=>mod==='domicilio'?base+(pro?.modalities?.domicilio?.surcharge||0):base;
+const prosFor=id=>{
+  // FIX 3: exclude logged-in professional from booking their own services
+  const selfId=S.user?.type==='professional'?S.user.proId:null;
+  return PROS.filter(p=>p.svcIds.includes(id)&&(S._bookingAsPro?p.id!==selfId:true));
+};
+const myPro=()=>S.user?.type==='professional'?PROS.find(p=>p.id===S.user.proId)||PROS[0]:null;
+const fmtD=d=>{const x=new Date(d+'T00:00:00');return x.toLocaleDateString('es-CL',{weekday:'short',day:'numeric',month:'short'});};
+const todayStr=()=>new Date().toISOString().split('T')[0];
+const fc=v=>v.replace(/\s/g,'').replace(/(\d{4})/g,'$1 ').trim().slice(0,19);
+const fe=v=>{v=v.replace(/\D/g,'');if(v.length>=2)v=v.slice(0,2)+'/'+v.slice(2,4);return v.slice(0,5);};
+
+function slotsFor(pro,date){
+  if(!pro||!date)return[];
+  const d=new Date(date+'T00:00:00');
+  const dow=((d.getDay()+6)%7); // 0=Mon
+  const dayData=pro.schedule[dow];
+  if(!dayData||!dayData.on)return[];
+  const booked=S.appointments.filter(a=>a.date===date&&a.pro?.id===pro.id&&a.status!=='rejected').map(a=>a.time);
+  const blocked=(pro.blocks||[]).filter(b=>b.date===date).flatMap(b=>{
+    const hrs=[];ALLHRS.forEach(h=>{if(h>=b.from&&h<b.to)hrs.push(h);});return hrs;
+  });
+  return dayData.hrs.filter(h=>!booked.includes(h)&&!blocked.includes(h));
+}
+
+function go(v){S.view=v;S.drawerOpen=false;render();}
+function toggleDrawer(){S.drawerOpen=!S.drawerOpen;render();}
+function closeDrawer(){S.drawerOpen=false;render();}
+function openLogin(){S.drawerOpen=true;S.drawerTab='login';render();}
+
+// ── CAPTCHA HELPERS (reCAPTCHA v3 invisible) ─────────────────────────────────
+// Replace 'TU_SITE_KEY_V3' with your actual reCAPTCHA v3 site key.
+// Token is sent to your backend for server-side verification.
+// Minimum score threshold: 0.5 (0.0 = bot, 1.0 = human)
+const RECAPTCHA_V3_KEY = 'TU_SITE_KEY_V3';
+const SCORE_THRESHOLD  = 0.5;
+let _loginFailCount    = 0; // track failed logins — captcha activates after 3 fails
+
+function getV3Token(action){
+  return new Promise((resolve,reject)=>{
+    if(typeof grecaptcha==='undefined'){
+      // reCAPTCHA not loaded (dev/offline) — resolve with null to allow flow
+      console.warn('[reCAPTCHA] Script not loaded. Skipping verification.');
+      return resolve(null);
+    }
+    grecaptcha.ready(()=>{
+      grecaptcha.execute(RECAPTCHA_V3_KEY,{action})
+        .then(resolve).catch(reject);
+    });
+  });
+}
+
+// Simulates backend verification — replace with real fetch() to your API
+async function verifyV3Token(token, action){
+  if(!token) return true; // dev mode: skip
+  // In production:
+  // const res = await fetch('/api/captcha/verify', {
+  //   method:'POST', headers:{'Content-Type':'application/json'},
+  //   body: JSON.stringify({token, action})
+  // });
+  // const data = await res.json();
+  // return data.success && data.score >= SCORE_THRESHOLD;
+  console.log(`[reCAPTCHA] Token for action "${action}":`, token.slice(0,20)+'…');
+  return true; // demo: always passes
+}
+
+function showCaptchaError(msg){
+  const el = document.getElementById('captcha-error-msg');
+  if(el){ el.textContent = msg; el.style.display='block'; }
+}
+function hideCaptchaError(){
+  const el = document.getElementById('captcha-error-msg');
+  if(el){ el.style.display='none'; el.textContent=''; }
+}
+
+// ── AUTH ─────────────────────────────────────────────────────────────────────
+async function doLogin(){
+  const e=document.getElementById('li-e')?.value.trim()||'';
+  const p=document.getElementById('li-p')?.value||'';
+  hideCaptchaError();
+
+  // reCAPTCHA v3: only challenge after 3 failed attempts
+  if(_loginFailCount >= 3){
+    try{
+      const token = await getV3Token('login');
+      const ok    = await verifyV3Token(token,'login');
+      if(!ok){
+        showCaptchaError('Verificación fallida. Intenta de nuevo.');
+        return;
+      }
+    } catch(err){
+      console.error('[reCAPTCHA] Error:',err);
+    }
+  }
+
+  const u=S.users.find(x=>x.email===e&&x.password===p);
+  if(u){
+    _loginFailCount=0;
+    S.user=u;S.drawerOpen=false;S.lf.error='';render();
+  } else {
+    _loginFailCount++;
+    S.lf.error=`Email o contraseña incorrectos${_loginFailCount>=3?' (verificación activada)':''}`;
+    render();
+  }
+}
+async function doRegister(){
+  const n=document.getElementById('rg-n')?.value.trim()||'';
+  const e=document.getElementById('rg-e')?.value.trim()||'';
+  const p=document.getElementById('rg-p')?.value||'';
+  const c=document.getElementById('rg-c')?.value||'';
+  const ph=document.getElementById('rg-ph')?.value.trim()||'';
+  if(!n||!e||!p||!ph){S.rf.error='Completa todos los campos';render();return;}
+  if(p!==c){S.rf.error='Las contraseñas no coinciden';render();return;}
+  if(S.users.find(u=>u.email===e)){S.rf.error='Email ya registrado';render();return;}
+
+  // reCAPTCHA v3 — always verify on register (high-risk action)
+  try{
+    const token = await getV3Token('register');
+    const ok    = await verifyV3Token(token,'register');
+    if(!ok){S.rf.error='Verificación de seguridad fallida. Intenta de nuevo.';render();return;}
+  } catch(err){
+    console.error('[reCAPTCHA] Error:',err);
+    // fail-open in demo; in production consider fail-closed
+  }
+
+  const u={id:uid(),name:n,email:e,password:p,phone:ph,type:S.rf.type};
+  S.users.push(u);S.user=u;S.drawerOpen=false;render();
+}
+function doLogout(){
+  S.user=null; S.appointments=[];
+  // FIX 2: reset all booking state between sessions
+  S.selSvc=null; S.selPro=null; S.selMod=null; S.clientAddr='';
+  S.bStep=1; S.editingId=null; S._bookingAsPro=false;
+  S.form={name:'',phone:'',email:'',date:'',time:'',gender:'',notes:''};
+  S.lf={email:'',password:'',error:''};
+  S.rf={name:'',email:'',password:'',confirm:'',phone:'',type:'client',error:''};
+  S._reviewStars=0; S._reviewingAptId=null;
+  go('home');
+}
+
+// Pro books as client: launches normal booking flow but tags the appointment
+function startBookingAsPro(){
+  S._bookingAsPro=true;
+  go('home');
+  setTimeout(()=>{
+    const msg=document.createElement('div');
+    msg.innerHTML='<div style="position:fixed;top:70px;left:50%;transform:translateX(-50%);background:var(--purple);color:white;padding:10px 20px;border-radius:10px;font-size:13px;font-weight:500;z-index:200;box-shadow:0 4px 20px rgba(0,0,0,0.2);">Selecciona el servicio que quieres reservar para ti</div>';
+    document.body.appendChild(msg);
+    setTimeout(()=>msg.remove(),3000);
+  },100);
+}
+function editAptAsPro(id){editApt(id);}
+
+
+// ── CLIENT BOOKING ────────────────────────────────────────────────────────────
+function startBooking(id){
+  if(!S.user){openLogin();return;}
+  S.selSvc=ALL_SVCS.find(s=>s.id===id);
+  S.selPro=null;S.selMod=null;S.clientAddr='';
+  S.form={name:S.user.name,phone:'',email:'',date:'',time:'',gender:'',notes:''};
+  S.editingId=null;S.bStep=1;go('booking');
+}
+function selPro(id){
+  const prev=S.selPro?.id;
+  S.selPro=PROS.find(p=>p.id===id);
+  // FIX 7: only reset modality if pro actually changed AND new pro doesn't support previous choice
+  if(prev!==id){
+    const mod=S.selMod;
+    if(mod && !S.selPro.modalities[mod]?.on) S.selMod=null;
+  }
+  render();
+}
+function selMod(m){S.selMod=m;if(m==='estudio')S.clientAddr='';render();}
+function goBStep(n){S.bStep=n;render();}
+
+function bNext(){
+  if(S.bStep===1){
+    if(!S.selPro){showToast('Selecciona un profesional','warn');return;}
+    S.bStep=2;render();
+  }else if(S.bStep===2){
+    if(!S.selMod){showToast('Elige una modalidad','warn');return;}
+    if(S.selMod==='domicilio'){
+      const a=document.getElementById('addr-inp')?.value||S.clientAddr;
+      S.clientAddr=a;if(!a.trim()){showToast('Ingresa tu dirección','warn');return;}
+    }
+    S.bStep=3;render();
+  }else if(S.bStep===3){
+    S.form.name=document.getElementById('f-n')?.value||S.form.name;
+    S.form.phone=document.getElementById('f-ph')?.value||S.form.phone;
+    S.form.email=document.getElementById('f-em')?.value||S.form.email;
+    S.form.date=document.getElementById('f-d')?.value||S.form.date;
+    S.form.time=document.getElementById('f-t')?.value||S.form.time;
+    S.form.notes=document.getElementById('f-no')?.value||S.form.notes;
+    if(!S.form.name||!S.form.phone||!S.form.email||!S.form.date||!S.form.time||!S.form.gender){showToast('Completa todos los campos','warn');return;}
+    if(S.editingId){
+      const t=calcTotal(gp(S.selSvc,S.form.gender),S.selPro,S.selMod);
+      S.appointments=S.appointments.map(a=>a.id===S.editingId?{...S.form,id:S.editingId,service:S.selSvc,pro:S.selPro,modality:S.selMod,address:S.clientAddr,price:t,status:a.status,isOwn:false}:a);
+      S.editingId=null;go('confirm');
+    }else{S.bStep=4;render();}
+  }
+}
+async function submitPay(){
+  const pn=document.getElementById('p-n')?.value||'';
+  const pnm=document.getElementById('p-nm')?.value||'';
+  const pe=document.getElementById('p-e')?.value||'';
+  const pc=document.getElementById('p-c')?.value||'';
+  if(!pn||!pnm||!pe||!pc){showToast('Completa los datos de pago','warn');return;}
+  // FIX 8: basic card validation
+  const cleanPn=pn.replace(/\s/g,'');
+  if(!/^\d{16}$/.test(cleanPn)){showToast('Número de tarjeta inválido','err');return;}
+  if(!/^\d{2}\/\d{2}$/.test(pe)){showToast('Fecha de vencimiento inválida','err');return;}
+  const [mm,yy]=pe.split('/').map(Number);
+  const now=new Date(); const expiry=new Date(2000+yy,mm-1,1);
+  if(mm<1||mm>12||expiry<now){showToast('La tarjeta está vencida','err');return;}
+  if(!/^\d{3,4}$/.test(pc)){showToast('CVV inválido','err');return;}
+  // FIX 1: reCAPTCHA v3 on payment (anti-carding)
+  try{
+    const token=await getV3Token('payment');
+    const ok=await verifyV3Token(token,'payment');
+    if(!ok){showToast('Verificación de seguridad fallida. Intenta de nuevo.','err');return;}
+  }catch(err){console.error('[reCAPTCHA]',err);}
+  const t=calcTotal(gp(S.selSvc,S.form.gender),S.selPro,S.selMod);
+  const bookedByProId=S._bookingAsPro&&S.user?.type==='professional'?myPro()?.id:null;
+  S.appointments.push({...S.form,id:uid(),service:S.selSvc,pro:S.selPro,modality:S.selMod,address:S.clientAddr,price:t,status:'pending',isOwn:false,bookedByProId});
+  S._bookingAsPro=false;
+  S.selSvc=null;S.selPro=null;S.selMod=null;go('confirm');
+}
+function setStatus(id,st){S.appointments=S.appointments.map(a=>a.id===id?{...a,status:st}:a);render();}
+function deleteApt(id){if(confirm('¿Cancelar?')){S.appointments=S.appointments.filter(a=>a.id!==id);render();}}
+function editApt(id){
+  const a=S.appointments.find(x=>x.id===id);
+  S.selSvc=a.service;S.selPro=a.pro;S.selMod=a.modality;S.clientAddr=a.address||'';
+  S.form={name:a.name,phone:a.phone,email:a.email,date:a.date,time:a.time,gender:a.gender,notes:a.notes||''};
+  S.editingId=id;S.bStep=3;go('booking');
+}
+
+// ── PRO OWN BOOKING ───────────────────────────────────────────────────────────
+function submitOwnBooking(){
+  const ob=S.ownBooking;
+  ob.proSvcId=parseInt(document.getElementById('ob-svc')?.value)||ob.proSvcId;
+  ob.date=document.getElementById('ob-d')?.value||ob.date;
+  ob.time=document.getElementById('ob-t')?.value||ob.time;
+  ob.clientName=document.getElementById('ob-cn')?.value||ob.clientName;
+  ob.clientPhone=document.getElementById('ob-cp')?.value||ob.clientPhone;
+  ob.notes=document.getElementById('ob-no')?.value||ob.notes;
+  if(!ob.proSvcId||!ob.date||!ob.time||!ob.clientName||!ob.gender){showToast('Completa todos los campos requeridos','warn');return;}
+  const pro=myPro();
+  // FIX 4: verify slot is still available before confirming
+  const available=slotsFor(pro,ob.date);
+  if(!available.includes(ob.time)){showToast('Ese horario ya no está disponible. Elige otro.','err');render();return;}
+  const svc=ALL_SVCS.find(s=>s.id===ob.proSvcId);
+  const price=gp(svc,ob.gender);
+  S.appointments.push({
+    id:uid(),name:ob.clientName,phone:ob.clientPhone,email:'',date:ob.date,time:ob.time,
+    gender:ob.gender,notes:ob.notes,service:svc,pro,modality:'estudio',address:pro.modalities.estudio.address||'',
+    price,status:'confirmed',isOwn:true
+  });
+  S.ownBooking={proSvcId:'',date:'',time:'',clientName:'',clientPhone:'',gender:'',notes:''};
+  S.proTab='citas';render();
+  showToast('Cita agendada exitosamente','ok');
+}
+
+// ── PRO SERVICE MANAGEMENT ────────────────────────────────────────────────────
+function addProSvc(){
+  const ns=S.newSvc;
+  ns.name=document.getElementById('ns-name')?.value||ns.name;
+  ns.dur=document.getElementById('ns-dur')?.value||ns.dur;
+  ns.pM=parseFloat(document.getElementById('ns-pm')?.value)||ns.pM;
+  ns.pF=parseFloat(document.getElementById('ns-pf')?.value)||ns.pF;
+  ns.cat=document.getElementById('ns-cat')?.value||ns.cat;
+  if(!ns.name||!ns.dur||!ns.pM||!ns.pF||!ns.cat){showToast('Completa todos los campos','warn');return;}
+  const pro=myPro();
+  const newId=uid();
+  const newSvcObj={id:newId,name:ns.name,dur:ns.dur,pM:parseFloat(ns.pM),pF:parseFloat(ns.pF),icon:ns.icon,cat:ns.cat,bg:'#EDE9F6'};
+  // FIX 13: add to state.proServices, not global ALL_SVCS
+  if(!S.proServices[pro.id]) S.proServices[pro.id]=[];
+  S.proServices[pro.id].push(newSvcObj);
+  pro.svcIds.push(newId);
+  S.newSvc={name:'',dur:'',pM:'',pF:'',cat:'',icon:'✂️'};
+  render();showToast('Servicio agregado','ok');
+}
+function removeProSvc(id){
+  if(!confirm('¿Eliminar este servicio?'))return;
+  const pro=myPro();
+  pro.svcIds=pro.svcIds.filter(x=>x!==id);
+  render();
+}
+
+// ── AGENDA / SCHEDULE ─────────────────────────────────────────────────────────
+function toggleHour(dow,hr){
+  const pro=myPro(); // FIX 12
+  const d=pro.schedule[dow];
+  if(d.hrs.includes(hr))d.hrs=d.hrs.filter(h=>h!==hr);
+  else d.hrs=[...d.hrs,hr].sort();
+  render();
+}
+function toggleDay(dow){
+  const pro=myPro();
+  pro.schedule[dow].on=!pro.schedule[dow].on;
+  render();
+}
+function addBlock(){
+  const bf=S.blockForm;
+  bf.date=document.getElementById('bl-d')?.value||bf.date;
+  bf.from=document.getElementById('bl-f')?.value||bf.from;
+  bf.to=document.getElementById('bl-t')?.value||bf.to;
+  bf.reason=document.getElementById('bl-r')?.value||bf.reason;
+  if(!bf.date||!bf.from||!bf.to){showToast('Completa fecha y horario','warn');return;}
+  myPro().blocks.push({id:uid(),...bf});
+  S.blockForm={date:'',from:'',to:'',reason:''};
+  render();
+}
+function removeBlock(id){
+  const pro=myPro(); // FIX 12: cache, don't call twice
+  pro.blocks=(pro.blocks||[]).filter(b=>b.id!==id);
+  render();
+}
+
+// ── RENDER TOPBAR ─────────────────────────────────────────────────────────────
+function renderTopbar(){
+  document.getElementById('topbar').innerHTML=`<div class="topbar">
+    <button class="hbg" onclick="toggleDrawer()"><span></span><span></span><span></span></button>
+    <div class="logo"><div class="logo-mark">✂️</div><div class="logo-txt">Cut <span>Me</span></div></div>
+    ${S.user?`<div class="upill" onclick="toggleDrawer()"><div class="ava">${ini(S.user.name)}</div>
+      <span style="font-size:13px;max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${S.user.name.split(' ')[0]}</span></div>`
+    :`<button class="lbtn" onclick="openLogin()">Ingresar</button>`}
+  </div>`;
+}
+
+// ── RENDER DRAWER ─────────────────────────────────────────────────────────────
+function renderDrawer(){
+  const lg=!!S.user;
+  let body='';
+  if(lg){
+    const isPro=S.user.type==='professional';
+    const isAdmin=S.user.type==='admin';
+    const roleLabel=isAdmin?'⭐ Super Admin':isPro?'Profesional':'Cliente';
+    const cardBg=isAdmin?'background:linear-gradient(135deg,#FEF3C7,#FDE68A);':'';
+    const avaBg=isAdmin?'background:#F59E0B;':'';
+    body=`<div class="ucard" style="${cardBg}"><div class="ucardava" style="${avaBg}">${ini(S.user.name)}</div>
+      <div><div style="font-size:14px;font-weight:600;font-family:'Syne',sans-serif;">${esc(S.user.name)}</div>
+      <div style="font-size:11px;color:var(--text-2);">${roleLabel}</div></div></div>
+    <div class="nsep"></div>
+    <div class="ni${S.view==='home'?' act':''}" onclick="go('home')"><span>🏠</span><span>Inicio</span></div>
+    ${isAdmin?`
+    <div class="ngrp">Super Admin</div>
+    <div class="ni${S.view==='admin'&&S.adminTab==='overview'?' act':''}" onclick="S.adminTab='overview';go('admin')"><span>📊</span><span>Overview</span></div>
+    <div class="ni${S.view==='admin'&&S.adminTab==='featured'?' act':''}" onclick="S.adminTab='featured';go('admin')"><span>⭐</span><span>Destacados</span></div>
+    <div class="ni${S.view==='admin'&&S.adminTab==='reviews'?' act':''}" onclick="S.adminTab='reviews';go('admin')"><span>💬</span><span>Reseñas</span></div>
+    <div class="ni${S.view==='admin'&&S.adminTab==='citas'?' act':''}" onclick="S.adminTab='citas';go('admin')"><span>📅</span><span>Todas las citas</span></div>
+    <div class="ni${S.view==='admin'&&S.adminTab==='pagos'?' act':''}" onclick="S.adminTab='pagos';go('admin')"><span>💰</span><span>Pagos y retiros</span></div>
+    <div class="ni${S.view==='admin'&&S.adminTab==='users'?' act':''}" onclick="S.adminTab='users';go('admin')"><span>👥</span><span>Usuarios</span></div>
+    <div class="ni${S.view==='admin'&&S.adminTab==='categorias'?' act':''}" onclick="S.adminTab='categorias';go('admin')"><span>🗂️</span><span>Categorías</span></div>
+    `:!isPro?`<div class="ni${S.view==='clientDash'?' act':''}" onclick="go('clientDash')"><span>📅</span><span>Mis citas</span></div>`:`
+    <div class="ngrp">Panel profesional</div>
+    <div class="ni${S.view==='pro'&&S.proTab==='dash'?' act':''}" onclick="S.proTab='dash';go('pro')"><span>📊</span><span>Dashboard</span></div>
+    <div class="ni${S.view==='pro'&&S.proTab==='citas'?' act':''}" onclick="S.proTab='citas';go('pro')"><span>📅</span><span>Mis citas</span></div>
+    <div class="ni${S.view==='pro'&&S.proTab==='servicios'?' act':''}" onclick="S.proTab='servicios';go('pro')"><span>💼</span><span>Mis servicios</span></div>
+    <div class="ni${S.view==='pro'&&S.proTab==='agenda'?' act':''}" onclick="S.proTab='agenda';go('pro')"><span>🗓️</span><span>Agenda y horarios</span></div>
+    <div class="ni${S.view==='pro'&&S.proTab==='config'?' act':''}" onclick="S.proTab='config';go('pro')"><span>⚙️</span><span>Configuración</span></div>
+    <div class="ni${S.view==='pro'&&S.proTab==='billing'?' act':''}" onclick="S.proTab='billing';go('pro')"><span>💳</span><span>Facturación</span></div>`}
+    <div class="nsep"></div>
+    <div class="ni danger" onclick="doLogout()"><span>🚪</span><span>Cerrar sesión</span></div>`;
+  }else{
+    const isL=S.drawerTab==='login';
+    body=`<div style="padding:16px 20px 0;">
+      <div class="dtabs" style="margin:0 0 16px;">
+        <div class="dtab${isL?' act':''}" onclick="S.drawerTab='login';render()">Iniciar sesión</div>
+        <div class="dtab${!isL?' act':''}" onclick="S.drawerTab='register';render()">Crear cuenta</div>
+      </div></div>
+    ${isL?`<div class="fi">
+      <div class="f"><label class="lb">Email</label><input class="inp" id="li-e" type="email" placeholder="tu@email.com" onkeydown="if(event.key==='Enter')doLogin()"></div>
+      <div class="f"><label class="lb">Contraseña</label><input class="inp" id="li-p" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"></div>
+      ${S.lf.error?`<p class="errmsg">${S.lf.error}</p>`:''}
+      <div id="captcha-error-msg" style="display:none;font-size:12px;color:var(--red,#E05252);margin-bottom:8px;padding:8px 10px;background:#FDECEC;border-radius:6px;"></div>
+      <button class="btn btn-p" style="margin-top:4px;" onclick="doLogin()">Ingresar</button>
+      <div class="hintbox"><strong>Cuentas de prueba</strong><br>👤 cliente@demo.com / 123456<br>💼 pro@demo.com / 123456<br>⭐ admin@cutme.com / admin123</div>
+    </div>`:`<div class="fi">
+      <div style="display:flex;gap:8px;margin-bottom:12px;">
+        <div class="topt${S.rf.type==='client'?' act':''}" onclick="S.rf.type='client';render()">👥 Cliente</div>
+        <div class="topt${S.rf.type==='professional'?' act':''}" onclick="S.rf.type='professional';render()">💼 Profesional</div>
+      </div>
+      <div class="f"><label class="lb">Nombre</label><input class="inp" id="rg-n" placeholder="Juan Pérez"></div>
+      <div class="f"><label class="lb">Email</label><input class="inp" id="rg-e" type="email" placeholder="tu@email.com"></div>
+      <div class="f"><label class="lb">Teléfono</label><input class="inp" id="rg-ph" placeholder="+56 9..."></div>
+      <div class="f"><label class="lb">Contraseña</label><input class="inp" id="rg-p" type="password" placeholder="••••••••"></div>
+      <div class="f"><label class="lb">Confirmar</label><input class="inp" id="rg-c" type="password" placeholder="••••••••"></div>
+      ${S.rf.error?`<p class="errmsg">${S.rf.error}</p>`:''}
+      <button class="btn btn-p" onclick="doRegister()">Crear cuenta</button>
+      <div style="font-size:10px;color:var(--txt3,#9E94B0);text-align:center;margin-top:10px;line-height:1.5;">Protegido por reCAPTCHA. <a href='https://policies.google.com/privacy' style='color:inherit;' target='_blank'>Privacidad</a> · <a href='https://policies.google.com/terms' style='color:inherit;' target='_blank'>Términos</a></div>
+    </div>`}`;
+  }
+  document.getElementById('ov').className='ov'+(S.drawerOpen?' open':'');
+  document.getElementById('drawer').className='drawer'+(S.drawerOpen?' open':'');
+  document.getElementById('dc').innerHTML=`<div class="dh">
+    <div class="logo"><div class="logo-mark" style="width:28px;height:28px;font-size:13px;">✂️</div>
+    <div class="logo-txt" style="font-size:15px;">Cut <span>Me</span></div></div>
+    <button class="dclose" onclick="closeDrawer()">✕</button></div>
+    <div class="db">${body}</div>`;
+}
+
+// ── VIEW: HOME ────────────────────────────────────────────────────────────────
+function vHome(){
+  const cats=['Todos','Peluquería','Uñas','Belleza','Bronceado','Masajes','Depilación'];
+  const rawFiltered=S.selectedCat==='Todos'?ALL_SVCS:ALL_SVCS.filter(s=>s.cat===S.selectedCat);
+  const filtered=[...rawFiltered].sort((a,b)=>{
+    const af=S.featuredSvcIds.includes(a.id)?1:0;
+    const bf=S.featuredSvcIds.includes(b.id)?1:0;
+    return bf-af;
+  });
+  const pc=S.appointments.filter(a=>!a.isOwn&&a.status!=='cancelled'&&a.status!=='rejected').length; // FIX 9
+  return`<div class="main">
+  <div class="hero">
+    ${S.user?`<div class="heb">Belleza & bienestar</div>
+    <div class="het">Hola, ${S.user.name.split(' ')[0]} 👋</div>
+    <div class="hed">¿Qué servicio quieres agendar hoy?</div>
+    <div class="hecta">
+      ${S.user.type==='client'&&pc>0?`<button class="hbw" onclick="go('clientDash')">Mis citas (${pc})</button>`:''}
+      ${S.user.type==='professional'?`<button class="hbw" onclick="S.proTab='dash';go('pro')">Mi panel profesional</button>`:''}
+    </div>`:
+    `<div class="heb">Belleza & bienestar</div>
+    <div class="het">Elige tu profesional y reserva al instante</div>
+    <div class="hed">Estudio o a domicilio — tú decides cómo y con quién.</div>
+    <div class="hecta">
+      <button class="hbw" onclick="openLogin()">Reservar ahora</button>
+      <button class="hbt" onclick="S.rf.type='client';S.drawerTab='register';openLogin()">Crear cuenta</button>
+    </div>`}
+  </div>
+  <div class="stit">Destacados</div>
+  <div class="chips">${ALL_SVCS.slice(0,7).map(s=>`
+    <div class="chip" onclick="startBooking(${s.id})">
+      <div style="font-size:26px;margin-bottom:6px;">${s.icon}</div>
+      <div style="font-size:12px;font-weight:500;color:var(--text);margin-bottom:2px;">${s.name}</div>
+      <div style="font-size:11px;color:var(--text-3);">${s.dur}</div>
+    </div>`).join('')}
+  </div>
+  <div class="stit">Todos los servicios</div>
+  <div class="cats">${cats.map(c=>`<div class="catpill${S.selectedCat===c?' act':''}" onclick="S.selectedCat='${c}';render()">${c}</div>`).join('')}</div>
+  <div class="svclist">${filtered.map(s=>{
+    const pr=prosFor(s.id);
+    const isFeatSvc=S.featuredSvcIds.includes(s.id);
+    const featPros=pr.filter(p=>S.featuredProIds.includes(p.id));
+    return`<div class="svcrow${isFeatSvc?' featured-ring':''}" onclick="startBooking(${s.id})">
+      <div class="svcicn" style="background:${s.bg};position:relative;">
+        ${s.icon}
+        ${isFeatSvc?`<div style="position:absolute;top:-4px;right:-4px;font-size:10px;">⭐</div>`:''}
+      </div>
+      <div style="flex:1;min-width:0;">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px;">
+          <span style="font-size:14px;font-weight:500;">${s.name}</span>
+          ${isFeatSvc?`<span class="featured-badge">Destacado</span>`:''}
+        </div>
+        <div style="font-size:12px;color:var(--text-3);">${s.cat} · ${s.dur} · <span style="color:var(--purple);font-weight:500;">${pr.length} profesional${pr.length!==1?'es':''}</span>
+          ${featPros.length?`· <span style="color:#F59E0B;font-weight:500;">${featPros.length} recomendado${featPros.length!==1?'s':''}</span>`:''}
+        </div>
+      </div>
+      <div style="text-align:right;flex-shrink:0;">
+        <div style="font-size:10px;color:var(--text-3);">desde</div>
+        <div style="font-size:16px;font-weight:600;color:var(--purple);font-family:'Syne',sans-serif;">${fp(Math.min(s.pM,s.pF))}</div>
+      </div>
+      <button class="svccta" onclick="event.stopPropagation();startBooking(${s.id})">Reservar</button>
+    </div>`;}).join('')}
+  </div></div>`;
+}
+
+// ── VIEW: BOOKING ─────────────────────────────────────────────────────────────
+function stepUI(cur){
+  const ST=[{n:1,l:'Profesional'},{n:2,l:'Modalidad'},{n:3,l:'Detalle'},{n:4,l:'Pago'}];
+  return`<div class="steps">${ST.map((s,i)=>`
+    <div style="display:flex;align-items:center;gap:6px;">
+      <div class="sdot ${s.n<cur?'done':s.n===cur?'act':'pend'}">${s.n<cur?'✓':s.n}</div>
+      <span class="slbl${s.n===cur?' act':''}">${s.l}</span>
+    </div>${i<3?`<div class="sline${s.n<cur?' done':''}"></div>`:''}`).join('')}</div>`;
+}
+function vBooking(){
+  const s=S.selSvc; const step=S.bStep;
+  const pros=prosFor(s.id);
+  let content='';
+  if(step===1){
+    content=`<div class="card">
+      <div class="ctit">Elige tu profesional</div>
+      <div style="font-size:13px;color:var(--text-2);margin-bottom:14px;">${pros.length} disponible${pros.length!==1?'s':''} para <strong>${s.name}</strong></div>
+      <div class="prolist">${pros.map(p=>{
+        const hE=p.modalities.estudio.on,hD=p.modalities.domicilio.on,sel=S.selPro?.id===p.id;
+        return`<div class="procard${sel?' sel':''}" onclick="selPro(${p.id})">
+          <div class="proava" style="background:${p.color}">${p.avatar}</div>
+          <div style="flex:1;min-width:0;">
+            <div style="font-size:14px;font-weight:600;font-family:'Syne',sans-serif;">${p.name}${sel?`<span class="selbadge">✓</span>`:''} ${S.featuredProIds.includes(p.id)?`<span class="featured-badge">⭐ Recomendado</span>`:''}</div>
+            <div style="font-size:12px;color:var(--text-2);margin-bottom:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(p.bio)}</div>
+            ${(()=>{const av=avgRating(p.id);const cnt=S.reviews.filter(r=>r.proId===p.id&&r.status==='approved').length;return av?`<div style="font-size:11px;color:#F59E0B;margin-bottom:4px;">★ ${av} <span style="color:var(--text-3);">(${cnt} reseña${cnt!==1?'s':''})</span></div>`:''})()}
+            <div style="display:flex;gap:4px;flex-wrap:wrap;">
+              ${hE?`<span class="protag ptE">🏢 Estudio</span>`:''}
+              ${hD?`<span class="protag ptD">🚗 Domicilio</span>`:''}
+            </div>
+            ${(()=>{
+              const proRevs=S.reviews.filter(r=>r.proId===p.id&&r.status==='approved');
+              if(!proRevs.length) return '';
+              const avg=(proRevs.reduce((s,r)=>s+r.stars,0)/proRevs.length).toFixed(1);
+              const last=proRevs.slice(-2).reverse();
+              return`<div style="margin-top:8px;background:var(--bg);border-radius:8px;padding:8px 10px;">
+                <div style="font-size:12px;font-weight:600;color:var(--amber);margin-bottom:4px;">★ ${avg} <span style="color:var(--text-3);font-weight:400;">(${proRevs.length} reseña${proRevs.length!==1?'s':''})</span></div>
+                ${last.map(r=>`<div style="font-size:11px;color:var(--text-2);margin-bottom:3px;"><strong>${r.authorName}:</strong> ${'★'.repeat(r.stars)} ${r.comment?`"${esc(r.comment).slice(0,60)}${r.comment.length>60?'…':''}"`:''}</div>`).join('')}
+              </div>`;
+            })()}
+          </div>
+          <div style="text-align:right;flex-shrink:0;">
+            <div style="font-size:12px;color:var(--amber);">${stars(p.rating)} ${p.rating}</div>
+            <div style="font-size:10px;color:var(--text-3);margin-bottom:4px;">${p.reviews} reseñas</div>
+            <div style="font-size:15px;font-weight:700;color:var(--purple);font-family:'Syne',sans-serif;">${fp(Math.min(s.pM,s.pF))}</div>
+          </div>
+        </div>`;}).join('')}
+      </div>
+      <button class="btn btn-p" onclick="bNext()">Continuar →</button>
+    </div>`;
+  }else if(step===2){
+    const pro=S.selPro,hE=pro.modalities.estudio.on,hD=pro.modalities.domicilio.on;
+    const base=S.form.gender?gp(s,S.form.gender):Math.min(s.pM,s.pF);
+    content=`<div class="card">
+      <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--purple-light);border-radius:10px;margin-bottom:16px;">
+        <div class="proava" style="background:${pro.color};width:36px;height:36px;font-size:13px;">${pro.avatar}</div>
+        <div><div style="font-size:13px;font-weight:600;font-family:'Syne',sans-serif;">${pro.name}</div>
+        <div style="font-size:11px;color:var(--text-2);">${stars(pro.rating)} ${pro.rating} · ${pro.reviews} reseñas</div></div>
+      </div>
+      <div class="ctit">¿Cómo prefieres el servicio?</div>
+      <div class="modrow">
+        <div class="modopt${S.selMod==='estudio'?' act':''}${!hE?' dis':''}" onclick="selMod('estudio')">
+          ${hE?`<div class="modbadge" style="background:var(--teal);">Disponible</div>`:''}
+          <div style="font-size:26px;margin-bottom:6px;">🏢</div>
+          <div style="font-size:13px;font-weight:600;font-family:'Syne',sans-serif;margin-bottom:3px;">En estudio</div>
+          <div style="font-size:11px;color:var(--text-2);">${hE?pro.modalities.estudio.address:'No disponible'}</div>
+          ${hE?`<div style="font-size:11px;color:var(--teal);font-weight:500;margin-top:4px;">Sin costo extra</div>`:''}
+        </div>
+        <div class="modopt${S.selMod==='domicilio'?' act':''}${!hD?' dis':''}" onclick="selMod('domicilio')">
+          ${hD?`<div class="modbadge" style="background:var(--amber);">Disponible</div>`:''}
+          <div style="font-size:26px;margin-bottom:6px;">🚗</div>
+          <div style="font-size:13px;font-weight:600;font-family:'Syne',sans-serif;margin-bottom:3px;">A domicilio</div>
+          <div style="font-size:11px;color:var(--text-2);">${hD?`Radio máx. ${pro.modalities.domicilio.maxKm} km`:'No disponible'}</div>
+          ${hD?`<div style="font-size:11px;color:var(--amber);font-weight:500;margin-top:4px;">+${fp(pro.modalities.domicilio.surcharge)} traslado</div>`:''}
+        </div>
+      </div>
+      ${S.selMod==='domicilio'?`<div class="f"><label class="lb">Tu dirección</label>
+        <input class="inp" id="addr-inp" placeholder="Av. Las Condes 1234" value="${S.clientAddr}" oninput="S.clientAddr=this.value">
+        <div style="font-size:11px;color:var(--text-3);margin-top:4px;">Cobertura hasta ${pro.modalities.domicilio.maxKm} km</div></div>`:''}
+      ${S.selMod?`<div class="totalbar"><span style="font-size:13px;color:var(--text-2);">Total estimado</span>
+        <span style="font-size:22px;font-weight:700;color:var(--purple);font-family:'Syne',sans-serif;">${fp(calcTotal(base,pro,S.selMod))}</span></div>`:''}
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-o" style="flex:0 0 44px;" onclick="goBStep(1)">←</button>
+        <button class="btn btn-p" onclick="bNext()">Continuar →</button>
+      </div>
+    </div>`;
+  }else if(step===3){
+    const f=S.form,sl=slotsFor(S.selPro,f.date);
+    const base=f.gender?gp(s,f.gender):null;
+    const tot=base?calcTotal(base,S.selPro,S.selMod):null;
+    content=`<div class="card">
+      <div style="background:var(--purple-light);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+        <span style="font-size:28px;">${s.icon}</span>
+        <div><div style="font-size:14px;font-weight:600;font-family:'Syne',sans-serif;color:var(--purple);">${s.name}</div>
+        <div style="font-size:12px;color:var(--text-2);">con ${S.selPro.name} · ${S.selMod==='domicilio'?'🚗 Domicilio':'🏢 Estudio'}</div></div>
+      </div>
+      <div class="f"><label class="lb">Nombre</label><input class="inp" id="f-n" placeholder="Tu nombre" value="${f.name}"></div>
+      <div class="f"><label class="lb">Género del servicio</label>
+        <div style="display:flex;gap:10px;margin-bottom:12px;">
+          <div class="gopt${f.gender==='male'?' act':''}" onclick="S.form.gender='male';render()">
+            <div style="font-size:22px;margin-bottom:4px;">👨</div><div style="font-size:12px;color:var(--text-2);margin-bottom:3px;">Hombre</div>
+            <div style="font-size:14px;font-weight:600;color:var(--purple);font-family:'Syne',sans-serif;">${fp(calcTotal(s.pM,S.selPro,S.selMod))}</div>
+          </div>
+          <div class="gopt${f.gender==='female'?' act':''}" onclick="S.form.gender='female';render()">
+            <div style="font-size:22px;margin-bottom:4px;">👩</div><div style="font-size:12px;color:var(--text-2);margin-bottom:3px;">Mujer</div>
+            <div style="font-size:14px;font-weight:600;color:var(--purple);font-family:'Syne',sans-serif;">${fp(calcTotal(s.pF,S.selPro,S.selMod))}</div>
+          </div>
+        </div>
+      </div>
+      <div class="g2">
+        <div class="f"><label class="lb">Teléfono</label><input class="inp" id="f-ph" placeholder="+56 9..." value="${f.phone}"></div>
+        <div class="f"><label class="lb">Email</label><input class="inp" id="f-em" type="email" placeholder="tu@email.com" value="${f.email}"></div>
+      </div>
+      <div class="g2">
+        <div class="f"><label class="lb">Fecha</label><input class="inp" id="f-d" type="date" value="${f.date}" min="${todayStr()}" onchange="S.form.date=this.value;render()"></div>
+        <div class="f"><label class="lb">Hora</label><select class="inp inp-sel" id="f-t">
+          <option value="">Seleccionar</option>${sl.map(t=>`<option${f.time===t?' selected':''}>${t}</option>`).join('')}
+        </select></div>
+      </div>
+      ${S.selMod==='domicilio'?`<div class="callout ca"><span style="font-size:16px;flex-shrink:0;">🚗</span>
+        <div><strong>A domicilio</strong> — ${S.clientAddr}<br><span style="font-size:11px;">Traslado: ${fp(S.selPro.modalities.domicilio.surcharge)}</span></div></div>`
+      :`<div class="callout ct"><span style="font-size:16px;flex-shrink:0;">🏢</span>
+        <div><strong>En estudio</strong> — ${S.selPro.modalities.estudio.address}</div></div>`}
+      <div class="f"><label class="lb">Notas (opcional)</label><textarea class="inp" id="f-no" rows="2" placeholder="¿Algo que debamos saber?">${f.notes}</textarea></div>
+      ${tot!==null?`<div class="totalbar">
+        <div><div style="font-size:13px;color:var(--text-2);">Total</div>
+        ${S.selMod==='domicilio'?`<div style="font-size:10px;color:var(--amber);">incluye ${fp(S.selPro.modalities.domicilio.surcharge)} traslado</div>`:''}</div>
+        <span style="font-size:22px;font-weight:700;color:var(--purple);font-family:'Syne',sans-serif;">${fp(tot)}</span>
+      </div>`:''}
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-o" style="flex:0 0 44px;" onclick="goBStep(2)">←</button>
+        <button class="btn btn-p" onclick="S.form.time=document.getElementById('f-t')?.value||'';bNext()">${S.editingId?'Guardar cambios':'Continuar al pago'}</button>
+      </div>
+    </div>`;
+  }else if(step===4){
+    const base=gp(s,S.form.gender),tot=calcTotal(base,S.selPro,S.selMod);
+    content=`<div class="card">
+      <div class="ctit">Pago seguro 🔒</div>
+      <div style="background:var(--purple-light);border-radius:10px;padding:14px;margin-bottom:16px;">
+        ${[['Servicio',s.name],['Profesional',S.selPro.name],['Modalidad',S.selMod==='domicilio'?'🚗 A domicilio':'🏢 En estudio'],
+          ...(S.selMod==='domicilio'?[['Dirección',S.clientAddr]]:[['Estudio',S.selPro.modalities.estudio.address]]),
+          ['Fecha',`${S.form.date} ${S.form.time}`],['Servicio base',fp(base)],
+          ...(S.selMod==='domicilio'?[['Traslado',`<span style="color:var(--amber)">+${fp(S.selPro.modalities.domicilio.surcharge)}</span>`]]:[])
+        ].map(([k,v])=>`<div style="display:flex;justify-content:space-between;margin-bottom:5px;font-size:13px;"><span style="color:var(--text-2);">${k}</span><span>${v}</span></div>`).join('')}
+        <div style="display:flex;justify-content:space-between;padding-top:10px;border-top:1px solid rgba(123,94,167,0.15);font-weight:700;font-size:16px;color:var(--purple);">
+          <span>Total</span><span>${fp(tot)}</span></div>
+      </div>
+      <div class="f"><label class="lb">Número de tarjeta</label><input class="inp" id="p-n" placeholder="1234 5678 9012 3456" oninput="this.value=fc(this.value)"></div>
+      <div class="f"><label class="lb">Nombre en la tarjeta</label><input class="inp" id="p-nm" placeholder="JUAN PEREZ"></div>
+      <div class="g2">
+        <div class="f"><label class="lb">Vencimiento</label><input class="inp" id="p-e" placeholder="MM/AA" oninput="this.value=fe(this.value)"></div>
+        <div class="f"><label class="lb">CVV</label><input class="inp" id="p-c" placeholder="123" maxlength="3"></div>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-o" style="flex:0 0 44px;" onclick="goBStep(3)">←</button>
+        <button class="btn btn-g" onclick="submitPay()">Confirmar pago ${fp(tot)}</button>
+      </div>
+    </div>`;
+  }
+  return`<div class="main">
+    <div class="ph"><button class="pbk" onclick="go('home')">←</button><div class="ptit">${s.icon} ${s.name}</div></div>
+    ${stepUI(step)}${content}</div>`;
+}
+
+// ── VIEW: CONFIRM ─────────────────────────────────────────────────────────────
+function vConfirm(){
+  return`<div class="main"><div class="confirmwrap"><div class="confirmbox">
+    <div style="width:60px;height:60px;background:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:24px;color:white;">✓</div>
+    <div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:700;margin-bottom:8px;">¡Reserva confirmada!</div>
+    <div style="font-size:14px;color:var(--text-2);margin-bottom:24px;line-height:1.6;">Tu cita fue agendada correctamente. Recibirás un recordatorio por email.</div>
+    <button class="btn btn-p" style="margin-bottom:10px;" onclick="if(S.user?.type==='professional'){S.proTab='citas';S.citasSubTab='como-cliente';}go(S.user?.type==='client'?'clientDash':'pro')">${S.user?.type==='client'?'Ver mis citas':S._bookingAsPro?'Ver mis reservas':'Ver panel'}</button>
+    <button class="btn btn-o" onclick="S.selSvc=null;S.selPro=null;S.selMod=null;S.editingId=null;go('home')">Agendar otra cita</button>
+  </div></div></div>`;
+}
+
+// ── VIEW: CLIENT DASH ─────────────────────────────────────────────────────────
+function vClientDash(){
+  const apts=S.appointments.filter(a=>!a.isOwn);
+  const p=apts.filter(a=>a.status==='pending').length;
+  const c=apts.filter(a=>a.status==='confirmed').length;
+  const r=apts.filter(a=>a.status==='rejected').length;
+  return`<div class="main">
+    <div class="ph"><button class="pbk" onclick="go('home')">←</button><div class="ptit">Mis citas</div></div>
+    <div style="display:flex;gap:10px;margin-bottom:16px;">
+      <div class="statbox"><div class="statnum" style="color:var(--amber)">${p}</div><div class="statlbl">Pendientes</div></div>
+      <div class="statbox"><div class="statnum" style="color:var(--teal)">${c}</div><div class="statlbl">Confirmadas</div></div>
+      <div class="statbox"><div class="statnum" style="color:var(--red)">${r}</div><div class="statlbl">Rechazadas</div></div>
+    </div>
+    ${apts.length===0?`<div class="empty"><div style="font-size:40px;margin-bottom:12px;">📅</div>
+      <div style="font-size:16px;font-weight:600;font-family:'Syne',sans-serif;margin-bottom:6px;">Sin citas aún</div>
+      <div style="margin-bottom:16px;">Elige tu profesional y reserva</div>
+      <button class="btn btn-p" style="max-width:180px;margin:0 auto;display:block;" onclick="go('home')">Ver servicios</button></div>`
+    :apts.map(a=>`<div class="aptitem ${a.status}">
+      <div style="display:flex;justify-content:space-between;align-items:start;gap:8px;">
+        <div style="flex:1;min-width:0;">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;flex-wrap:wrap;">
+            <span style="font-size:18px;">${a.service.icon}</span>
+            <span style="font-weight:600;font-size:14px;font-family:'Syne',sans-serif;">${a.service.name}</span>
+            <span class="badge ${a.status==='pending'?'bp':a.status==='confirmed'?'bc':'br'}">${a.status==='pending'?'Pendiente':a.status==='confirmed'?'Confirmada':'Rechazada'}</span>
+          </div>
+          <div style="font-size:12px;color:var(--text-2);margin-bottom:2px;">👤 ${a.pro?.name||'—'} · ${a.modality==='domicilio'?'🚗':'🏢'} ${a.modality==='domicilio'?'Domicilio':'Estudio'}</div>
+          ${a.modality==='domicilio'&&a.address?`<div style="font-size:11px;color:var(--text-3);margin-bottom:2px;">📍 ${esc(a.address)}</div>`:''}
+          ${a.modality==='estudio'&&a.pro?.modalities?.estudio?.address?`<div style="font-size:11px;color:var(--text-3);margin-bottom:2px;">📍 ${a.pro.modalities.estudio.address}</div>`:''}
+          <div style="font-size:12px;color:var(--text-2);">${fmtD(a.date)} · ${a.time} · ${a.gender==='male'?'Hombre':'Mujer'} · <strong>${fp(a.price)}</strong></div>
+          ${reviewWidget(a)}
+        </div>
+        <div style="display:flex;gap:6px;flex-shrink:0;">
+          ${a.status!=='rejected'?`<button class="bsm bsm-p" onclick="editApt(${a.id})">✏️</button>`:''}
+          <button class="bsm bsm-r" onclick="deleteApt(${a.id})">✕</button>
+        </div>
+      </div>
+    </div>`).join('')}
+  </div>`;
+}
+
+// ── VIEW: PRO PANEL ───────────────────────────────────────────────────────────
+function vPro(){
+  const tabs=[
+    {id:'dash',icon:'📊',label:'Dashboard'},
+    {id:'citas',icon:'📅',label:'Citas'},
+    {id:'servicios',icon:'💼',label:'Servicios'},
+    {id:'agenda',icon:'🗓️',label:'Agenda'},
+    {id:'config',icon:'⚙️',label:'Config'},
+    {id:'billing',icon:'💳',label:'Boleta'}
+  ];
+  const tabBar=`<div style="display:flex;gap:2px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:4px;margin-bottom:20px;overflow-x:auto;">
+    ${tabs.map(t=>`<button onclick="S.proTab='${t.id}';render()" style="flex:1;min-width:fit-content;padding:8px 10px;border:none;border-radius:8px;cursor:pointer;font-size:12px;font-weight:500;font-family:'DM Sans',sans-serif;white-space:nowrap;transition:all 0.15s;
+      ${S.proTab===t.id?'background:var(--purple);color:white;':'background:transparent;color:var(--text-2);'}">${t.icon} ${t.label}</button>`).join('')}
+  </div>`;
+  let content='';
+  if(S.proTab==='dash') content=proTabDash();
+  else if(S.proTab==='citas') content=proTabCitas();
+  else if(S.proTab==='servicios') content=proTabServicios();
+  else if(S.proTab==='agenda') content=proTabAgenda();
+  else if(S.proTab==='config') content=proTabConfig();
+  else if(S.proTab==='billing') content=proTabBilling();
+  return`<div class="main">
+    <div class="ph"><button class="pbk" onclick="go('home')">←</button><div class="ptit">Panel profesional</div></div>
+    ${tabBar}${content}</div>`;
+}
+
+// ── PRO TAB: DASHBOARD ────────────────────────────────────────────────────────
+function proTabDash(){
+  const pro=myPro();
+  const all=S.appointments.filter(a=>a.pro?.id===pro.id);
+  const pending=all.filter(a=>a.status==='pending');
+  const confirmed=all.filter(a=>a.status==='confirmed');
+  const earn=confirmed.reduce((s,a)=>s+a.price,0);
+  const pendEarn=pending.reduce((s,a)=>s+a.price,0);
+  const ownApts=all.filter(a=>a.isOwn);
+  return`
+  <div style="display:flex;gap:10px;margin-bottom:16px;">
+    <div class="statbox"><div class="statnum" style="color:var(--amber)">${pending.length}</div><div class="statlbl">Por revisar</div></div>
+    <div class="statbox"><div class="statnum" style="color:var(--teal)">${confirmed.length}</div><div class="statlbl">Confirmadas</div></div>
+    <div class="statbox"><div class="statnum" style="color:var(--blue)">${ownApts.length}</div><div class="statlbl">Propias</div></div>
+    <div class="statbox"><div class="statnum" style="color:var(--purple)">${fp(earn)}</div><div class="statlbl">Ingresos</div></div>
+  </div>
+  <div class="wallet">
+    <div style="font-size:12px;opacity:0.8;margin-bottom:4px;">Billetera virtual</div>
+    <div class="wamt">${fp(earn)}</div>
+    <div style="display:flex;gap:10px;margin-bottom:14px;">
+      <div class="wstat"><div class="wstatn">${fp(earn)}</div><div class="wstatl">Confirmado</div></div>
+      <div class="wstat"><div class="wstatn">${fp(pendEarn)}</div><div class="wstatl">Pendiente</div></div>
+      <div class="wstat"><div class="wstatn">${confirmed.length}</div><div class="wstatl">Citas</div></div>
+    </div>
+    ${(()=>{
+      const pro=myPro();
+      const myPending=S.withdrawals.filter(w=>w.proId===pro.id&&w.status==='pending');
+      const myPaid=S.withdrawals.filter(w=>w.proId===pro.id&&w.status==='paid');
+      const paidTotal=myPaid.reduce((s,w)=>s+w.amount,0);
+      const available=earn-paidTotal-myPending.reduce((s,w)=>s+w.amount,0);
+      return`<div style="display:flex;gap:10px;margin-bottom:14px;">
+        <div class="wstat"><div class="wstatn">${fp(available)}</div><div class="wstatl">Disponible</div></div>
+        <div class="wstat"><div class="wstatn">${fp(paidTotal)}</div><div class="wstatl">Retirado</div></div>
+        <div class="wstat"><div class="wstatn">${myPending.length}</div><div class="wstatl">Sol. pendiente</div></div>
+      </div>
+      <div class="callout ct" style="margin-bottom:10px;"><span style="font-size:14px;flex-shrink:0;">ℹ️</span>
+        <div>Los retiros se procesan <strong>1 vez por semana</strong> (viernes). El admin recibirá tu solicitud y liberará el pago.</div></div>
+      ${myPending.length>0?`<div style="background:rgba(255,255,255,0.15);border-radius:8px;padding:10px;margin-bottom:10px;font-size:12px;">
+        ⏳ Solicitud pendiente: <strong>${fp(myPending[0].amount)}</strong> — en proceso</div>`:''}
+      ${available>0&&myPending.length===0?`<button class="wbtn" onclick="requestWithdrawal()">Solicitar retiro ${fp(available)}</button>`:`<button class="wbtn" style="opacity:0.5;cursor:not-allowed;">${available<=0?'Sin saldo disponible':'Solicitud en proceso'}</button>`}`;
+    })()}
+  </div>
+  <div class="card">
+    <div class="ctit">Próximas citas</div>
+    ${pending.length===0?`<div style="color:var(--text-3);font-size:13px;text-align:center;padding:16px 0;">Sin solicitudes pendientes</div>`
+    :pending.slice(0,3).map(a=>`<div class="aptitem pending" style="margin-bottom:8px;">
+      <div style="display:flex;justify-content:space-between;align-items:start;gap:8px;">
+        <div><div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;">
+          <span>${a.service.icon}</span><strong style="font-size:13px;">${a.service.name}</strong>
+          <span class="badge bp">Pendiente</span></div>
+          <div style="font-size:12px;color:var(--text-2);">${esc(a.name)} · ${a.date} ${a.time} · ${fp(a.price)} · ${a.modality==='domicilio'?'🚗':'🏢'}</div>
+        </div>
+        <div style="display:flex;gap:6px;flex-shrink:0;">
+          <button class="bsm bsm-g" onclick="setStatus(${a.id},'confirmed')">✓ Aceptar</button>
+          <button class="bsm bsm-r" onclick="setStatus(${a.id},'rejected')">✕</button>
+        </div>
+      </div></div>`).join('')}
+    ${pending.length>3?`<button class="btn btn-o" style="margin-top:8px;" onclick="S.proTab='citas';render()">Ver todas (${pending.length})</button>`:''}
+  </div>`;
+}
+
+// ── PRO TAB: CITAS ────────────────────────────────────────────────────────────
+// citasSubTab: 'como-cliente' | 'mis-clientes'
+function proTabCitas(){
+  const pro=myPro();
+  if(!S.citasSubTab) S.citasSubTab='como-cliente';
+
+  const subBar=`<div style="display:flex;gap:0;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:3px;margin-bottom:16px;">
+    <button onclick="S.citasSubTab='como-cliente';render()" style="flex:1;padding:9px 8px;border:none;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.15s;
+      ${S.citasSubTab==='como-cliente'?'background:var(--surface);color:var(--purple);box-shadow:0 1px 4px rgba(123,94,167,0.15);':'background:transparent;color:var(--text-2);'}">
+      🙋 Mis citas como cliente
+    </button>
+    <button onclick="S.citasSubTab='mis-clientes';render()" style="flex:1;padding:9px 8px;border:none;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.15s;
+      ${S.citasSubTab==='mis-clientes'?'background:var(--surface);color:var(--purple);box-shadow:0 1px 4px rgba(123,94,167,0.15);':'background:transparent;color:var(--text-2);'}">
+      👥 Citas de mis clientes
+    </button>
+  </div>`;
+
+  return subBar + (S.citasSubTab==='como-cliente' ? citasComoCliente() : citasMisClientes());
+}
+
+// Sub-panel A: el profesional reserva un turno con OTRO profesional (como cliente)
+function citasComoCliente(){
+  const pro=myPro();
+  // Citas que el profesional tiene como CLIENTE (booked por él para sí mismo)
+  const misReservas=S.appointments.filter(a=>a.bookedByProId===pro.id && !a.isOwn);
+
+  // Flujo de reserva inline: paso único simplificado o redirige al flujo normal
+  return`
+  <div class="card">
+    <div class="ctit">Reservar un servicio para mí</div>
+    <div class="callout ct">
+      <span style="font-size:16px;flex-shrink:0;">💡</span>
+      <div>¿Necesitas cortarte el pelo, un masaje u otro servicio? Reserva con cualquier profesional del catálogo igual que un cliente.</div>
+    </div>
+    <button class="btn btn-p" onclick="startBookingAsPro()">Ver catálogo y reservar →</button>
+  </div>
+  <div class="card">
+    <div class="ctit">Mis reservas personales</div>
+    ${misReservas.length===0
+      ?`<div style="color:var(--text-3);font-size:13px;text-align:center;padding:20px 0;">
+          <div style="font-size:32px;margin-bottom:8px;">✂️</div>
+          Todavía no tienes citas reservadas para ti.<br>
+          <button class="btn btn-o" style="max-width:200px;margin:12px auto 0;display:block;" onclick="startBookingAsPro()">Explorar servicios</button>
+        </div>`
+      :misReservas.map(a=>`<div class="aptitem ${a.status}">
+        <div style="display:flex;justify-content:space-between;align-items:start;gap:8px;">
+          <div style="flex:1;min-width:0;">
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;flex-wrap:wrap;">
+              <span style="font-size:18px;">${a.service.icon}</span>
+              <strong style="font-size:14px;font-family:'Syne',sans-serif;">${a.service.name}</strong>
+              <span class="badge ${a.status==='pending'?'bp':a.status==='confirmed'?'bc':'br'}">${a.status==='pending'?'Pendiente':a.status==='confirmed'?'Confirmada':'Rechazada'}</span>
+            </div>
+            <div style="font-size:12px;color:var(--text-2);margin-bottom:2px;">
+              👤 con <strong>${a.pro?.name||'—'}</strong> · ${a.modality==='domicilio'?'🚗 Domicilio':'🏢 Estudio'}
+            </div>
+            ${a.modality==='domicilio'&&a.address?`<div style="font-size:11px;color:var(--text-3);margin-bottom:2px;">📍 ${esc(a.address)}</div>`:''}
+            ${a.modality==='estudio'&&a.pro?.modalities?.estudio?.address?`<div style="font-size:11px;color:var(--text-3);margin-bottom:2px;">📍 ${a.pro.modalities.estudio.address}</div>`:''}
+            <div style="font-size:12px;color:var(--text-2);">${fmtD(a.date)} · ${a.time} · ${a.gender==='male'?'Hombre':'Mujer'} · <strong>${fp(a.price)}</strong></div>
+            ${reviewWidget(a)}
+          </div>
+          <div style="display:flex;gap:6px;flex-shrink:0;">
+            ${a.status!=='rejected'?`<button class="bsm bsm-p" onclick="editAptAsPro(${a.id})">✏️</button>`:''}
+            <button class="bsm bsm-r" onclick="deleteApt(${a.id})">✕</button>
+          </div>
+        </div>
+      </div>`).join('')}
+  </div>`;
+}
+
+// Sub-panel B: historial de citas de sus propios clientes + agendar en su nombre
+function citasMisClientes(){
+  const pro=myPro();
+  const allApts=S.appointments.filter(a=>a.pro?.id===pro.id);
+  const FILTERS=[{id:'all',l:'Todas'},{id:'pending',l:'Pendientes'},{id:'confirmed',l:'Confirmadas'},{id:'rejected',l:'Rechazadas'},{id:'own',l:'Agendadas por mí'}];
+  const filtered=S.aptFilter==='all'?allApts:S.aptFilter==='own'?allApts.filter(a=>a.isOwn):allApts.filter(a=>a.status===S.aptFilter);
+
+  return`
+  <div class="card">
+    <div class="ctit">Agendar cita para un cliente</div>
+    <div class="callout cb"><span style="font-size:16px;flex-shrink:0;">ℹ️</span>
+      <div>Agenda en nombre de clientes que te contactan por teléfono, presencialmente o por otro canal.</div>
+    </div>
+    <div class="g2">
+      <div class="f"><label class="lb">Servicio</label>
+        <select class="inp inp-sel" id="ob-svc" onchange="S.ownBooking.proSvcId=parseInt(this.value);render()">
+          <option value="">Seleccionar</option>
+          ${pro.svcIds.map(id=>{const sv=ALL_SVCS.find(s=>s.id===id);return sv?`<option value="${sv.id}"${S.ownBooking.proSvcId===sv.id?' selected':''}>${sv.icon} ${sv.name}</option>`:''}).join('')}
+        </select>
+      </div>
+      <div class="f"><label class="lb">Género</label>
+        <select class="inp inp-sel" onchange="S.ownBooking.gender=this.value">
+          <option value="">Seleccionar</option>
+          <option value="male"${S.ownBooking.gender==='male'?' selected':''}>👨 Hombre</option>
+          <option value="female"${S.ownBooking.gender==='female'?' selected':''}>👩 Mujer</option>
+        </select>
+      </div>
+    </div>
+    <div class="g2">
+      <div class="f"><label class="lb">Fecha</label><input class="inp" id="ob-d" type="date" min="${todayStr()}" value="${S.ownBooking.date}" onchange="S.ownBooking.date=this.value;render()"></div>
+      <div class="f"><label class="lb">Hora</label>
+        <select class="inp inp-sel" id="ob-t">
+          <option value="">Seleccionar</option>
+          ${(S.ownBooking.date?slotsFor(pro,S.ownBooking.date):[]).map(t=>`<option${S.ownBooking.time===t?' selected':''}>${t}</option>`).join('')}
+        </select>
+      </div>
+    </div>
+    <div class="g2">
+      <div class="f"><label class="lb">Nombre cliente *</label><input class="inp" id="ob-cn" placeholder="María González" value="${S.ownBooking.clientName}"></div>
+      <div class="f"><label class="lb">Teléfono cliente</label><input class="inp" id="ob-cp" placeholder="+56 9..." value="${S.ownBooking.clientPhone}"></div>
+    </div>
+    <div class="f"><label class="lb">Notas</label><textarea class="inp" id="ob-no" rows="2" placeholder="Indicaciones especiales...">${S.ownBooking.notes}</textarea></div>
+    ${S.ownBooking.proSvcId&&S.ownBooking.gender?`<div class="totalbar">
+      <span style="font-size:13px;color:var(--text-2);">Total</span>
+      <span style="font-size:20px;font-weight:700;color:var(--purple);font-family:'Syne',sans-serif;">${fp(gp(ALL_SVCS.find(s=>s.id===S.ownBooking.proSvcId),S.ownBooking.gender))}</span>
+    </div>`:''}
+    <button class="btn btn-p" onclick="submitOwnBooking()">✓ Confirmar cita</button>
+  </div>
+  <div class="card">
+    <div class="ctit">Historial de mis clientes</div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;">
+      ${FILTERS.map(f=>`<button onclick="S.aptFilter='${f.id}';render()" style="padding:5px 12px;border-radius:20px;border:1px solid var(--border);font-size:12px;cursor:pointer;
+        ${S.aptFilter===f.id?'background:var(--purple);color:white;border-color:var(--purple);':'background:var(--surface);color:var(--text-2);'}">${f.l}</button>`).join('')}
+    </div>
+    ${filtered.length===0
+      ?`<div style="color:var(--text-3);font-size:13px;text-align:center;padding:20px 0;">Sin citas en este filtro</div>`
+      :filtered.map(a=>`<div class="aptitem ${a.isOwn?'own':a.status}">
+        <div style="display:flex;justify-content:space-between;align-items:start;gap:8px;">
+          <div style="flex:1;min-width:0;">
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;flex-wrap:wrap;">
+              <span>${a.service.icon}</span>
+              <strong style="font-size:13px;font-family:'Syne',sans-serif;">${a.service.name}</strong>
+              ${a.isOwn?`<span class="badge bb">Agendada por mí</span>`:`<span class="badge ${a.status==='pending'?'bp':a.status==='confirmed'?'bc':'br'}">${a.status==='pending'?'Pendiente':a.status==='confirmed'?'Confirmada':'Rechazada'}</span>`}
+              <span style="font-size:10px;color:var(--text-3);">${a.modality==='domicilio'?'🚗':'🏢'}</span>
+            </div>
+            <div style="font-size:12px;color:var(--text-2);">${esc(a.name)} · ${fmtD(a.date)} ${a.time} · <strong>${fp(a.price)}</strong></div>
+            ${a.modality==='domicilio'&&a.address?`<div style="font-size:11px;color:var(--text-3);">📍 ${esc(a.address)}</div>`:''}
+          </div>
+          ${!a.isOwn&&a.status==='pending'?`<div style="display:flex;gap:6px;flex-shrink:0;">
+            <button class="bsm bsm-g" onclick="setStatus(${a.id},'confirmed')">✓</button>
+            <button class="bsm bsm-r" onclick="setStatus(${a.id},'rejected')">✕</button>
+          </div>`:a.isOwn?`<button class="bsm bsm-r" onclick="deleteApt(${a.id})">Cancelar</button>`:''}
+          ${a.status==='confirmed'?reviewWidget(a):''}
+        </div>
+      </div>`).join('')}
+  </div>`;
+}
+
+// ── PRO TAB: SERVICIOS ────────────────────────────────────────────────────────
+function proTabServicios(){
+  const pro=myPro();
+  const mySvcs=pro.svcIds.map(id=>ALL_SVCS.find(s=>s.id===id)).filter(Boolean);
+  return`
+  <div class="card">
+    <div class="ctit">Agregar servicio</div>
+    <div class="g2">
+      <div class="f"><label class="lb">Nombre del servicio</label>
+        <select class="inp inp-sel" id="ns-name">
+          <option value="">Seleccionar</option>
+          ${ALL_SVCS.map(s=>`<option value="${s.name}">${s.icon} ${s.name}</option>`).join('')}
+          <option value="__custom__">+ Personalizado…</option>
+        </select>
+      </div>
+      <div class="f"><label class="lb">Duración</label><input class="inp" id="ns-dur" placeholder="45 min" value="${S.newSvc.dur}"></div>
+    </div>
+    <div class="g2">
+      <div class="f"><label class="lb">Precio hombre ($)</label><input class="inp" id="ns-pm" type="number" placeholder="25" value="${S.newSvc.pM}"></div>
+      <div class="f"><label class="lb">Precio mujer ($)</label><input class="inp" id="ns-pf" type="number" placeholder="35" value="${S.newSvc.pF}"></div>
+    </div>
+    <div class="g2">
+      <div class="f"><label class="lb">Categoría</label>
+        <select class="inp inp-sel" id="ns-cat">
+          <option value="">Seleccionar</option>
+          ${CAT_OPTS.map(c=>`<option value="${c}"${S.newSvc.cat===c?' selected':''}>${c}</option>`).join('')}
+        </select>
+      </div>
+      <div class="f"><label class="lb">Ícono</label>
+        <select class="inp inp-sel" id="ns-icon" onchange="S.newSvc.icon=this.value;render()">
+          ${ICON_OPTS.map(i=>`<option value="${i}"${S.newSvc.icon===i?' selected':''}>${i}</option>`).join('')}
+        </select>
+      </div>
+    </div>
+    <button class="btn btn-p" onclick="S.newSvc.name=document.getElementById('ns-name').value;addProSvc()">+ Agregar servicio</button>
+  </div>
+  <div class="card">
+    <div class="ctit">Mis servicios publicados (${mySvcs.length})</div>
+    ${mySvcs.length===0?`<div style="color:var(--text-3);font-size:13px;text-align:center;padding:16px 0;">No tienes servicios publicados</div>`
+    :`<div class="svcmgmt">${mySvcs.map(s=>`
+      <div class="svcmgmtrow">
+        <div class="svcmgmticn" style="background:${s.bg}">${s.icon}</div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:13px;font-weight:500;">${s.name}</div>
+          <div style="font-size:11px;color:var(--text-3);">${s.cat} · ${s.dur} · 👨${fp(s.pM)} / 👩${fp(s.pF)}</div>
+        </div>
+        <div style="display:flex;gap:6px;flex-shrink:0;">
+          <button class="bsm bsm-a" onclick="S.editSvcId=${s.id};render()">✏️</button>
+          <button class="bsm bsm-r" onclick="removeProSvc(${s.id})">🗑️</button>
+        </div>
+      </div>
+      ${S.editSvcId===s.id?`<div style="background:var(--purple-light);border-radius:10px;padding:14px;margin-top:-4px;">
+        <div class="ctit" style="font-size:13px;margin-bottom:10px;">Editar precios — ${s.name}</div>
+        <div class="g2">
+          <div class="f"><label class="lb">Precio hombre</label><input class="inp" id="ep-m-${s.id}" type="number" value="${s.pM}"></div>
+          <div class="f"><label class="lb">Precio mujer</label><input class="inp" id="ep-f-${s.id}" type="number" value="${s.pF}"></div>
+        </div>
+        <div class="g2">
+          <button class="btn btn-p" onclick="s2=ALL_SVCS.find(x=>x.id===${s.id});s2.pM=parseFloat(document.getElementById('ep-m-${s.id}').value)||s2.pM;s2.pF=parseFloat(document.getElementById('ep-f-${s.id}').value)||s2.pF;S.editSvcId=null;render()">Guardar</button>
+          <button class="btn btn-o" onclick="S.editSvcId=null;render()">Cancelar</button>
+        </div>
+      </div>`:''}
+    `).join('')}</div>`}
+  </div>`;
+}
+
+// ── PRO TAB: AGENDA ───────────────────────────────────────────────────────────
+function proTabAgenda(){
+  const pro=myPro();
+  const blocks=pro.blocks||[];
+  return`
+  <div class="card">
+    <div class="ctit">Horarios de atención</div>
+    <div style="font-size:12px;color:var(--text-2);margin-bottom:14px;">Activa los días y haz clic en las horas para habilitarlas o deshabilitarlas.</div>
+    <div class="daygrid">
+      ${[0,1,2,3,4,5,6].map(dow=>{
+        const d=pro.schedule[dow];
+        return`<div class="daycol">
+          <div class="dayhd${d.on?' open':' closed'}" onclick="toggleDay(${dow})" style="cursor:pointer;">
+            ${DAYS[dow]}<div style="font-size:9px;">${d.on?'✓ Activo':'Cerrado'}</div>
+          </div>
+          ${d.on?ALLHRS.map(h=>`<div class="timeslot${d.hrs.includes(h)?' on':' off'}" onclick="toggleHour(${dow},'${h}')">${h}</div>`).join('')
+          :`<div style="padding:10px 4px;font-size:10px;color:var(--text-3);text-align:center;">—</div>`}
+        </div>`;}).join('')}
+    </div>
+    <button class="btn btn-p" onclick="showToast('Horarios guardados','ok')">Guardar horarios</button>
+  </div>
+  <div class="card">
+    <div class="ctit">Bloquear agenda</div>
+    <div class="callout ca"><span style="font-size:16px;flex-shrink:0;">🚫</span>
+      <div>Bloquea franjas horarias para vacaciones, descanso u otros compromisos. Los clientes no podrán reservar en esos horarios.</div></div>
+    <div class="g2">
+      <div class="f"><label class="lb">Fecha</label><input class="inp" id="bl-d" type="date" min="${todayStr()}" value="${S.blockForm.date}" oninput="S.blockForm.date=this.value"></div>
+      <div style="display:flex;gap:8px;">
+        <div class="f" style="flex:1;"><label class="lb">Desde</label>
+          <select class="inp inp-sel" id="bl-f" onchange="S.blockForm.from=this.value">
+            <option value="">--</option>${ALLHRS.map(h=>`<option value="${h}"${S.blockForm.from===h?' selected':''}>${h}</option>`).join('')}
+          </select>
+        </div>
+        <div class="f" style="flex:1;"><label class="lb">Hasta</label>
+          <select class="inp inp-sel" id="bl-t" onchange="S.blockForm.to=this.value">
+            <option value="">--</option>${ALLHRS.map(h=>`<option value="${h}"${S.blockForm.to===h?' selected':''}>${h}</option>`).join('')}
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="f"><label class="lb">Motivo (opcional)</label><input class="inp" id="bl-r" placeholder="Vacaciones, evento, etc." value="${S.blockForm.reason}" oninput="S.blockForm.reason=this.value"></div>
+    <button class="btn btn-p" onclick="addBlock()">🚫 Bloquear horario</button>
+    ${blocks.length>0?`<div style="margin-top:16px;"><div class="ctit" style="font-size:13px;margin-bottom:8px;">Bloqueos activos</div>
+      ${blocks.map(b=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--red-light);border-radius:8px;margin-bottom:6px;font-size:12px;">
+        <div><strong>${b.date}</strong> · ${b.from} – ${b.to}${b.reason?` · ${esc(b.reason)}`:''}</div>
+        <button class="bsm bsm-r" onclick="removeBlock(${b.id})">✕</button>
+      </div>`).join('')}
+    </div>`:''}
+  </div>`;
+}
+
+// ── PRO TAB: CONFIG ───────────────────────────────────────────────────────────
+function proTabConfig(){
+  const pro=myPro();
+  const cfg=pro.modalities;
+  return`
+  <div class="card">
+    <div class="ctit">🏢 Servicio en estudio</div>
+    <div class="toggle2">
+      <div class="tgbtn${cfg.estudio.on?' tgon-t':''}" onclick="cfg.estudio.on=true;render()">✓ Habilitado</div>
+      <div class="tgbtn${!cfg.estudio.on?' tgoff':''}" onclick="cfg.estudio.on=false;render()">✕ Deshabilitar</div>
+    </div>
+    ${cfg.estudio.on?`<div class="f"><label class="lb">Dirección del estudio</label>
+      <input class="inp" placeholder="Av. Providencia 1234, Piso 3" value="${cfg.estudio.address}" oninput="cfg.estudio.address=this.value"></div>`:''}
+  </div>
+  <div class="card">
+    <div class="ctit">🚗 Servicio a domicilio</div>
+    <div class="toggle2">
+      <div class="tgbtn${cfg.domicilio.on?' tgon-a':''}" onclick="cfg.domicilio.on=true;render()">✓ Habilitado</div>
+      <div class="tgbtn${!cfg.domicilio.on?' tgoff':''}" onclick="cfg.domicilio.on=false;render()">✕ Deshabilitar</div>
+    </div>
+    ${cfg.domicilio.on?`<div class="g2">
+      <div class="f"><label class="lb">Costo de traslado ($)</label>
+        <input class="inp" type="number" min="0" step="500" placeholder="5000" value="${cfg.domicilio.surcharge}" oninput="cfg.domicilio.surcharge=parseInt(this.value)||0"></div>
+      <div class="f"><label class="lb">Radio máximo (km)</label>
+        <input class="inp" type="number" min="1" max="50" placeholder="10" value="${cfg.domicilio.maxKm}" oninput="cfg.domicilio.maxKm=parseInt(this.value)||0"></div>
+    </div>
+    <div class="callout ca"><span>ℹ️</span><div>Los clientes verán el costo antes de confirmar.</div></div>`:''}
+  </div>
+  <button class="btn btn-p" onclick="showToast('Configuración guardada','warn')">Guardar configuración</button>`;
+}
+
+// ── PRO TAB: BILLING ──────────────────────────────────────────────────────────
+function proTabBilling(){
+  const pro=myPro();
+  const month=S.selMonth;
+  const b=S.billing;
+  const stats=S.appointments.filter(a=>{
+    if(a.status!=='confirmed'&&!a.isOwn)return false;
+    if(a.pro?.id!==pro.id)return false;
+    const d=new Date(a.date);
+    return(d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'))===month;
+  });
+  const total=stats.reduce((s,a)=>s+a.price,0);
+  const mn=new Date(month+'-01').toLocaleDateString('es-ES',{month:'long',year:'numeric'});
+  const dist={};
+  stats.forEach(a=>{if(!dist[a.service.name])dist[a.service.name]={count:0,income:0,icon:a.service.icon};dist[a.service.name].count++;dist[a.service.name].income+=a.price;});
+  return`
+  <div class="card">
+    <div class="ctit">Información de facturación</div>
+    <div class="f"><label class="lb">Nombre completo *</label><input class="inp" id="bl-n" placeholder="Juan Pérez" value="${b.fullName}" oninput="S.billing.fullName=this.value"></div>
+    <div class="f"><label class="lb">RUT *</label><input class="inp" id="bl-r2" placeholder="12.345.678-9" value="${b.rut}" oninput="S.billing.rut=this.value"></div>
+    <div class="g2">
+      <div class="f"><label class="lb">Teléfono</label><input class="inp" placeholder="+56 9..." value="${b.phone}" oninput="S.billing.phone=this.value"></div>
+      <div class="f"><label class="lb">Email</label><input class="inp" type="email" placeholder="tu@email.com" value="${b.email}" oninput="S.billing.email=this.value"></div>
+    </div>
+    <button class="btn btn-p" onclick="S.billing.saved=true;showToast('Guardado','ok')">Guardar</button>
+  </div>
+  <div class="card">
+    <div class="ctit">Boleta mensual de honorarios</div>
+    <div class="f"><label class="lb">Mes</label>
+      <input class="inp" type="month" value="${month}" max="${new Date().toISOString().slice(0,7)}" onchange="S.selMonth=this.value;render()" style="width:auto;"></div>
+    ${!b.saved?`<div class="callout ca"><span>⚠️</span><div>Completa tu información de facturación primero</div></div>`
+    :stats.length===0?`<div style="color:var(--text-3);font-size:13px;text-align:center;padding:16px 0;">Sin citas en ${mn}</div>`:`
+    <div class="tblwrap">
+      <div style="padding:14px;text-align:center;border-bottom:1px solid var(--border);">
+        <div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;">Boleta de honorarios</div>
+        <div style="font-size:12px;color:var(--text-2);margin-top:2px;">${mn.toUpperCase()}</div>
+        <div style="font-size:12px;color:var(--text-2);margin-top:4px;">${b.fullName} · RUT: ${b.rut}</div>
+      </div>
+      <table class="tbl">
+        <thead><tr><th>Servicio</th><th style="text-align:center;">Cant.</th><th style="text-align:right;">Total</th></tr></thead>
+        <tbody>${Object.entries(dist).map(([n,d])=>`<tr><td>${d.icon} ${n}</td><td style="text-align:center;">${d.count}</td><td style="text-align:right;">${fp(d.income)}</td></tr>`).join('')}</tbody>
+        <tfoot><tr><td>Total</td><td style="text-align:center;">${stats.length}</td><td style="text-align:right;">${fp(total)}</td></tr></tfoot>
+      </table>
+    </div>
+    <div class="g2" style="margin-top:10px;">
+      <button class="btn btn-o">📄 Descargar PDF</button>
+      <button class="btn btn-o">📧 Enviar email</button>
+    </div>`}
+  </div>`;
+}
+
+
+// ── REVIEWS ──────────────────────────────────────────────────────────────────
+function canReview(apt){
+  if(apt.status!=='confirmed') return false;
+  // Only after the appointment date has passed
+  const aptDate=new Date(apt.date+'T23:59:59');
+  if(aptDate>=new Date()) return false;
+  const uid=S.user?.id;
+  return !S.reviews.find(r=>r.aptId===apt.id&&r.authorId===uid);
+}
+function getReview(aptId){
+  return S.reviews.filter(r=>r.aptId===aptId);
+}
+function avgRating(proId){
+  const rs=S.reviews.filter(r=>r.proId===proId&&r.status==='approved');
+  if(!rs.length) return null;
+  return (rs.reduce((s,r)=>s+r.stars,0)/rs.length).toFixed(1);
+}
+function submitReview(aptId){
+  const apt=S.appointments.find(a=>a.id===aptId);
+  if(!apt) return;
+  const stars=S._reviewStars||0;
+  const comment=document.getElementById('rv-comment-'+aptId)?.value.trim()||'';
+  if(!stars){showToast('Selecciona una calificación','warn');return;}
+  const isAdmin=S.user?.type==='admin';
+  S.reviews.push({
+    id:uid(), aptId, authorId:S.user.id, authorName:S.user.name,
+    authorType:S.user.type, proId:apt.pro?.id, svcId:apt.service?.id,
+    stars, comment, status:'pending', date:todayStr()
+  });
+  S._reviewStars=0; S._reviewingAptId=null;
+  render();
+}
+function approveReview(id){S.reviews=S.reviews.map(r=>r.id===id?{...r,status:'approved'}:r);render();}
+function rejectReview(id){S.reviews=S.reviews.map(r=>r.id===id?{...r,status:'rejected'}:r);render();}
+function deleteReview(id){if(confirm('¿Eliminar reseña?')){S.reviews=S.reviews.filter(r=>r.id!==id);render();}}
+
+function starPicker(aptId){
+  const cur=S._reviewingAptId===aptId?(S._reviewStars||0):0;
+  return`<div class="star-picker" id="sp-${aptId}">${[1,2,3,4,5].map(n=>`<span class="${n<=cur?'on':''}" onclick="S._reviewStars=${n};S._reviewingAptId=${aptId};render()"
+    onmouseenter="document.querySelectorAll('#sp-${aptId} span').forEach((s,i)=>s.style.color=i<${n}?'#F59E0B':'#D1D5DB')"
+    onmouseleave="document.querySelectorAll('#sp-${aptId} span').forEach((s,i)=>s.style.color='')">★</span>`).join('')}</div>`;
+}
+
+function reviewWidget(apt){
+  if(!S.user) return '';
+  const existing=S.reviews.find(r=>r.aptId===apt.id&&r.authorId===S.user.id);
+  if(existing){
+    return`<div style="margin-top:10px;padding:10px 12px;background:var(--bg);border-radius:8px;">
+      <div style="font-size:11px;color:var(--text-3);margin-bottom:3px;">Tu reseña ${existing.status==='pending'?'<span style="color:var(--amber);">(pendiente de aprobación)</span>':existing.status==='approved'?'<span style="color:var(--green);">✓ Aprobada</span>':'<span style="color:var(--red);">✕ Rechazada</span>'}</div>
+      <div class="review-stars">${'★'.repeat(existing.stars)}${'☆'.repeat(5-existing.stars)}</div>
+      ${existing.comment?`<div style="font-size:12px;color:var(--text-2);margin-top:3px;">"${existing.comment}"</div>`:''}
+    </div>`;
+  }
+  if(!canReview(apt)) return '';
+  const isOpen=S._reviewingAptId===apt.id;
+  return`<div style="margin-top:10px;">
+    ${!isOpen?`<button class="bsm bsm-a" onclick="S._reviewingAptId=${apt.id};S._reviewStars=0;render()">⭐ Dejar reseña</button>`:`
+    <div style="background:var(--amber-light);border-radius:10px;padding:12px;">
+      <div style="font-size:12px;font-weight:500;margin-bottom:8px;color:#92400E;">Califica tu experiencia con ${apt.pro?.name}</div>
+      ${starPicker(apt.id)}
+      <textarea class="inp" id="rv-comment-${apt.id}" rows="2" placeholder="Comparte tu experiencia (opcional)..." style="margin-bottom:8px;font-size:12px;"></textarea>
+      <div style="display:flex;gap:8px;">
+        <button class="bsm bsm-g" onclick="submitReview(${apt.id})">Enviar reseña</button>
+        <button class="bsm bsm-r" onclick="S._reviewingAptId=null;render()">Cancelar</button>
+      </div>
+    </div>`}
+  </div>`;
+}
+
+// ── ADMIN VIEW ────────────────────────────────────────────────────────────────
+function vAdmin(){
+  const tabs=[{id:'overview',icon:'📊',label:'Overview'},{id:'citas',icon:'📅',label:'Citas'},{id:'pagos',icon:'💰',label:'Pagos'},{id:'featured',icon:'⭐',label:'Destacados'},{id:'reviews',icon:'💬',label:'Reseñas'},{id:'categorias',icon:'🗂️',label:'Categorías'},{id:'users',icon:'👥',label:'Usuarios'}];
+  const tabBar=`<div style="display:flex;gap:2px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:4px;margin-bottom:20px;overflow-x:auto;">
+    ${tabs.map(t=>`<button onclick="S.adminTab='${t.id}';render()" style="flex:1;min-width:fit-content;padding:8px 10px;border:none;border-radius:8px;cursor:pointer;font-size:12px;font-weight:500;font-family:'DM Sans',sans-serif;white-space:nowrap;transition:all 0.15s;
+      ${S.adminTab===t.id?'background:linear-gradient(135deg,#F59E0B,#F97316);color:white;':'background:transparent;color:var(--text-2);'}">${t.icon} ${t.label}</button>`).join('')}
+  </div>`;
+  let content='';
+  if(S.adminTab==='overview') content=adminOverview();
+  else if(S.adminTab==='citas') content=adminCitas();
+  else if(S.adminTab==='pagos') content=adminPagos();
+  else if(S.adminTab==='featured') content=adminFeatured();
+  else if(S.adminTab==='reviews') content=adminReviews();
+  else if(S.adminTab==='categorias') content=adminCategorias();
+  else if(S.adminTab==='users') content=adminUsers();
+  return`<div class="main">
+    <div class="ph"><button class="pbk" onclick="go('home')">←</button>
+      <div class="ptit">⭐ Super Admin</div></div>
+    ${tabBar}${content}</div>`;
+}
+
+function adminOverview(){
+  const totalApts=S.appointments.length;
+  const confirmed=S.appointments.filter(a=>a.status==='confirmed').length;
+  const pending=S.appointments.filter(a=>a.status==='pending').length;
+  const totalRevenue=S.appointments.filter(a=>a.status==='confirmed').reduce((s,a)=>s+a.price,0);
+  const pendingRevs=S.reviews.filter(r=>r.status==='pending').length;
+  return`
+  <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
+    <div class="admin-stat"><div class="admin-stat-n" style="color:var(--purple)">${S.users.filter(u=>u.type!=='admin').length}</div><div class="admin-stat-l">Usuarios</div></div>
+    <div class="admin-stat"><div class="admin-stat-n" style="color:var(--teal)">${confirmed}</div><div class="admin-stat-l">Citas confirmadas</div></div>
+    <div class="admin-stat"><div class="admin-stat-n" style="color:var(--amber)">${pending}</div><div class="admin-stat-l">Pendientes</div></div>
+    <div class="admin-stat"><div class="admin-stat-n" style="color:var(--green)">${fp(totalRevenue)}</div><div class="admin-stat-l">Ingresos totales</div></div>
+  </div>
+  ${(()=>{
+    const pw=S.withdrawals.filter(w=>w.status==='pending');
+    const pr=S.reviews.filter(r=>r.status==='pending');
+    const alerts=[];
+    if(pw.length) alerts.push(`<div class="callout ca" style="margin-bottom:8px;"><span>💰</span><div><strong>${pw.length} solicitud${pw.length!==1?'es':''} de retiro pendiente${pw.length!==1?'s':''}.</strong>
+      <button onclick="S.adminTab='pagos';render()" style="margin-left:8px;padding:2px 8px;border:none;background:var(--amber);color:white;border-radius:6px;font-size:11px;cursor:pointer;">Procesar</button></div></div>`);
+    if(pr.length) alerts.push(`<div class="callout ca"><span>⚠️</span><div><strong>${pr.length} reseña${pr.length!==1?'s':''} pendiente${pr.length!==1?'s':''} de moderación.</strong>
+      <button onclick="S.adminTab='reviews';render()" style="margin-left:8px;padding:2px 8px;border:none;background:var(--amber);color:white;border-radius:6px;font-size:11px;cursor:pointer;">Revisar</button></div></div>`);
+    return alerts.join('');
+  })()}
+  <div class="card">
+    <div class="ctit">Últimas citas del sistema</div>
+    ${S.appointments.length===0?`<div style="color:var(--text-3);font-size:13px;text-align:center;padding:16px 0;">Sin citas registradas</div>`
+    :S.appointments.slice(-5).reverse().map(a=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px;">
+      <div><span style="font-size:15px;">${a.service.icon}</span> <strong>${a.service.name}</strong> · ${a.name} → ${a.pro?.name}</div>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <span>${a.date}</span>
+        <span class="badge ${a.status==='pending'?'bp':a.status==='confirmed'?'bc':'br'}">${a.status}</span>
+      </div>
+    </div>`).join('')}
+  </div>
+  <div class="card">
+    <div class="ctit">Profesionales — resumen</div>
+    ${PROS.map(p=>{
+      const proApts=S.appointments.filter(a=>a.pro?.id===p.id&&a.status==='confirmed');
+      const proRevs=S.reviews.filter(r=>r.proId===p.id&&r.status==='approved');
+      const avg=proRevs.length?(proRevs.reduce((s,r)=>s+r.stars,0)/proRevs.length).toFixed(1):null;
+      return`<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);">
+        <div style="width:36px;height:36px;border-radius:10px;background:${p.color};display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:white;font-family:'Syne',sans-serif;flex-shrink:0;">${p.avatar}</div>
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:500;">${p.name} ${S.featuredProIds.includes(p.id)?'⭐':''}</div>
+          <div style="font-size:11px;color:var(--text-3);">${proApts.length} citas · ${avg?`★ ${avg} (${proRevs.length} reseñas)`:'Sin reseñas'}</div>
+        </div>
+        <button class="bsm ${S.featuredProIds.includes(p.id)?'bsm-a':'bsm-p'}" onclick="toggleFeaturedPro(${p.id})">${S.featuredProIds.includes(p.id)?'✕ Quitar':'⭐ Destacar'}</button>
+      </div>`;}).join('')}
+  </div>`;
+}
+
+function adminFeatured(){
+  return`
+  <div class="card">
+    <div class="ctit">⭐ Servicios destacados</div>
+    <div class="callout cb"><span>ℹ️</span><div>Los servicios destacados aparecen con badge dorado y orden preferente en el catálogo.</div></div>
+    ${ALL_SVCS.map(s=>{
+      const on=S.featuredSvcIds.includes(s.id);
+      return`<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);">
+        <div style="width:40px;height:40px;border-radius:10px;background:${s.bg};display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">${s.icon}</div>
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:500;">${s.name} ${on?`<span class="featured-badge">Destacado</span>`:''}</div>
+          <div style="font-size:11px;color:var(--text-3);">${s.cat} · ${prosFor(s.id).length} profesionales</div>
+        </div>
+        <button class="bsm ${on?'bsm-r':'bsm-a'}" onclick="toggleFeaturedSvc(${s.id})">${on?'✕ Quitar':'⭐ Destacar'}</button>
+      </div>`;}).join('')}
+  </div>
+  <div class="card" style="margin-top:0;">
+    <div class="ctit">⭐ Profesionales destacados</div>
+    <div class="callout cb"><span>ℹ️</span><div>Los profesionales destacados aparecen con badge "Recomendado" en la selección de profesional.</div></div>
+    ${PROS.map(p=>{
+      const on=S.featuredProIds.includes(p.id);
+      const avg=avgRating(p.id);
+      return`<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);">
+        <div style="width:40px;height:40px;border-radius:12px;background:${p.color};display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:white;font-family:'Syne',sans-serif;flex-shrink:0;">${p.avatar}</div>
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:500;">${p.name} ${on?`<span class="featured-badge">Recomendado</span>`:''}</div>
+          <div style="font-size:11px;color:var(--text-3);">★ ${avg||p.rating} · ${p.reviews} reseñas</div>
+        </div>
+        <button class="bsm ${on?'bsm-r':'bsm-a'}" onclick="toggleFeaturedPro(${p.id})">${on?'✕ Quitar':'⭐ Destacar'}</button>
+      </div>`;}).join('')}
+  </div>`;
+}
+
+function adminReviews(){
+  const RFILTERS=[{id:'all',l:'Todas'},{id:'pending',l:'Pendientes'},{id:'approved',l:'Aprobadas'},{id:'rejected',l:'Rechazadas'}];
+  const filter=S._adminRevFilter||'all';
+  const shown=filter==='all'?S.reviews:S.reviews.filter(r=>r.status===filter);
+  return`
+  <div class="card">
+    <div class="ctit">Moderación de reseñas</div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;">
+      ${RFILTERS.map(f=>`<button onclick="S._adminRevFilter='${f.id}';render()" style="padding:5px 12px;border-radius:20px;border:1px solid var(--border);font-size:12px;cursor:pointer;
+        ${filter===f.id?'background:var(--purple);color:white;border-color:var(--purple);':'background:var(--surface);color:var(--text-2);'}">${f.l} ${filter===f.id||f.id==='all'?'('+((f.id==='all'?S.reviews:S.reviews.filter(r=>r.status===f.id)).length)+')':''}</button>`).join('')}
+    </div>
+    ${shown.length===0?`<div style="color:var(--text-3);font-size:13px;text-align:center;padding:20px 0;">Sin reseñas en este filtro</div>`
+    :shown.map(r=>{
+      const pro=PROS.find(p=>p.id===r.proId);
+      const svc=ALL_SVCS.find(s=>s.id===r.svcId);
+      return`<div class="review-card${r.status==='pending'?' review-pending':''}">
+        <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:6px;">
+          <div>
+            <div style="font-size:12px;font-weight:600;">${r.authorName} <span style="font-weight:400;color:var(--text-3);">→ ${pro?.name||'—'}</span></div>
+            <div style="font-size:11px;color:var(--text-3);">${svc?svc.icon+' '+svc.name:''} · ${r.date}</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;">
+            <span class="badge ${r.status==='pending'?'bp':r.status==='approved'?'bc':'br'}">${r.status==='pending'?'Pendiente':r.status==='approved'?'Aprobada':'Rechazada'}</span>
+            <button class="bsm bsm-r" onclick="deleteReview(${r.id})" title="Eliminar">🗑️</button>
+          </div>
+        </div>
+        <div class="review-stars">${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</div>
+        ${r.comment?`<div style="font-size:12px;color:var(--text-2);margin-top:4px;font-style:italic;">"${r.comment}"</div>`:''}
+        ${r.status==='pending'?`<div style="display:flex;gap:8px;margin-top:10px;">
+          <button class="bsm bsm-g" onclick="approveReview(${r.id})">✓ Aprobar</button>
+          <button class="bsm bsm-r" onclick="rejectReview(${r.id})">✕ Rechazar</button>
+        </div>`:''}
+      </div>`;}).join('')}
+  </div>`;
+}
+
+function adminUsers(){
+  const nonAdmins=S.users.filter(u=>u.type!=='admin');
+  return`
+  <div class="card">
+    <div class="ctit">Gestión de usuarios (${nonAdmins.length})</div>
+    ${nonAdmins.map(u=>{
+      const userApts=S.appointments.filter(a=>a.name===u.name||a.bookedByProId===u.proId).length;
+      return`<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);">
+        <div style="width:38px;height:38px;border-radius:50%;background:${u.type==='professional'?'var(--purple)':'var(--teal)'};display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:white;font-family:'Syne',sans-serif;flex-shrink:0;">${ini(u.name)}</div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:13px;font-weight:500;">${u.name}</div>
+          <div style="font-size:11px;color:var(--text-3);">${u.email} · ${u.type==='professional'?'Profesional':'Cliente'}</div>
+        </div>
+        <div style="text-align:right;flex-shrink:0;">
+          <div style="font-size:11px;color:var(--text-3);">${userApts} citas</div>
+          <span class="badge ${u.type==='professional'?'bb':'bc'}">${u.type==='professional'?'Pro':'Cliente'}</span>
+        </div>
+      </div>`;}).join('')}
+  </div>`;
+}
+
+function adminCitas(){
+  const FILTERS=[{id:'all',l:'Todas'},{id:'pending',l:'Pendientes'},{id:'confirmed',l:'Confirmadas'},{id:'rejected',l:'Rechazadas'}];
+  const f=S._adminCitaFilter||'all';
+  const shown=(f==='all'?S.appointments:S.appointments.filter(a=>a.status===f)).slice().reverse();
+  return`
+  <div class="card">
+    <div class="ctit">Todas las citas del sistema (${S.appointments.length})</div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;">
+      ${FILTERS.map(fl=>`<button onclick="S._adminCitaFilter='${fl.id}';render()" style="padding:5px 12px;border-radius:20px;border:1px solid var(--border);font-size:12px;cursor:pointer;
+        ${f===fl.id?'background:var(--purple);color:white;border-color:var(--purple);':'background:var(--surface);color:var(--text-2);'}">${fl.l}</button>`).join('')}
+    </div>
+    ${shown.length===0?`<div style="color:var(--text-3);font-size:13px;text-align:center;padding:20px 0;">Sin citas</div>`
+    :shown.map(a=>`<div class="aptitem ${a.status}" style="margin-bottom:8px;">
+      <div style="display:flex;justify-content:space-between;align-items:start;gap:8px;">
+        <div style="flex:1;min-width:0;">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;flex-wrap:wrap;">
+            <span>${a.service.icon}</span>
+            <strong style="font-size:13px;font-family:'Syne',sans-serif;">${a.service.name}</strong>
+            <span class="badge ${a.status==='pending'?'bp':a.status==='confirmed'?'bc':'br'}">${a.status==='pending'?'Pendiente':a.status==='confirmed'?'Confirmada':'Rechazada'}</span>
+            ${a.isOwn?`<span class="badge bb">Propia</span>`:''}
+            <span style="font-size:10px;color:var(--text-3);">${a.modality==='domicilio'?'🚗':'🏢'}</span>
+          </div>
+          <div style="font-size:12px;color:var(--text-2);">👤 ${a.name} → ${a.pro?.name||'—'} · ${a.date} ${a.time} · <strong>${fp(a.price)}</strong></div>
+          ${a.modality==='domicilio'&&a.address?`<div style="font-size:11px;color:var(--text-3);">📍 ${esc(a.address)}</div>`:''}
+        </div>
+        ${a.status==='pending'?`<div style="display:flex;gap:6px;flex-shrink:0;">
+          <button class="bsm bsm-g" onclick="setStatus(${a.id},'confirmed')">✓</button>
+          <button class="bsm bsm-r" onclick="setStatus(${a.id},'rejected')">✕</button>
+        </div>`:''}
+      </div>
+    </div>`).join('')}
+  </div>`;
+}
+
+function adminPagos(){
+  const WFILTERS=[{id:'all',l:'Todas'},{id:'pending',l:'Pendientes'},{id:'paid',l:'Liberadas'},{id:'rejected',l:'Rechazadas'}];
+  const f=S._adminPayFilter||'pending';
+  const shown=f==='all'?S.withdrawals:S.withdrawals.filter(w=>w.status===f);
+  const pendingTotal=S.withdrawals.filter(w=>w.status==='pending').reduce((s,w)=>s+w.amount,0);
+  const paidTotal=S.withdrawals.filter(w=>w.status==='paid').reduce((s,w)=>s+w.amount,0);
+  // Next friday
+  const now=new Date(); const day=now.getDay();
+  const daysToFri=day<=5?5-day:6;
+  const nextFri=new Date(now); nextFri.setDate(now.getDate()+daysToFri);
+  const nextFriStr=nextFri.toLocaleDateString('es-CL',{weekday:'long',day:'numeric',month:'long'});
+  return`
+  <div style="display:flex;gap:10px;margin-bottom:16px;">
+    <div class="admin-stat"><div class="admin-stat-n" style="color:var(--amber)">${S.withdrawals.filter(w=>w.status==='pending').length}</div><div class="admin-stat-l">Pendientes</div></div>
+    <div class="admin-stat"><div class="admin-stat-n" style="color:var(--amber)">${fp(pendingTotal)}</div><div class="admin-stat-l">Monto pendiente</div></div>
+    <div class="admin-stat"><div class="admin-stat-n" style="color:var(--green)">${fp(paidTotal)}</div><div class="admin-stat-l">Total liberado</div></div>
+  </div>
+  <div class="callout ct" style="margin-bottom:16px;">
+    <span style="font-size:18px;flex-shrink:0;">📅</span>
+    <div><strong>Próximo ciclo de pagos: ${nextFriStr}</strong><br>
+    Los retiros se procesan 1 vez por semana los viernes. Los profesionales son notificados al liberar el pago.</div>
+  </div>
+  <div class="card">
+    <div class="ctit">Solicitudes de retiro</div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;">
+      ${WFILTERS.map(fl=>`<button onclick="S._adminPayFilter='${fl.id}';render()" style="padding:5px 12px;border-radius:20px;border:1px solid var(--border);font-size:12px;cursor:pointer;
+        ${f===fl.id?'background:var(--purple);color:white;border-color:var(--purple);':'background:var(--surface);color:var(--text-2);'}">${fl.l} (${(fl.id==='all'?S.withdrawals:S.withdrawals.filter(w=>w.status===fl.id)).length})</button>`).join('')}
+    </div>
+    ${shown.length===0?`<div style="color:var(--text-3);font-size:13px;text-align:center;padding:20px 0;">Sin solicitudes en este filtro</div>`
+    :shown.map(w=>`<div style="background:${w.status==='pending'?'#FFFBF0':w.status==='paid'?'#F0FBF8':'#FFF5F5'};border:1px solid ${w.status==='pending'?'var(--amber)':w.status==='paid'?'var(--teal)':'var(--red)'};border-left-width:3px;border-radius:10px;padding:14px;margin-bottom:8px;">
+      <div style="display:flex;justify-content:space-between;align-items:start;gap:8px;">
+        <div style="flex:1;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+            <strong style="font-size:14px;font-family:'Syne',sans-serif;">${w.proName}</strong>
+            <span class="badge ${w.status==='pending'?'bp':w.status==='paid'?'bc':'br'}">${w.status==='pending'?'Pendiente':w.status==='paid'?'Liberado':'Rechazado'}</span>
+          </div>
+          <div style="font-size:12px;color:var(--text-2);">Solicitado el ${w.requestDate}${w.paidDate?` · Pagado el ${w.paidDate}`:''}</div>
+        </div>
+        <div style="text-align:right;flex-shrink:0;">
+          <div style="font-size:20px;font-weight:700;font-family:'Syne',sans-serif;color:${w.status==='paid'?'var(--teal)':'var(--text)'};">${fp(w.amount)}</div>
+          ${w.status==='pending'?`<div style="display:flex;gap:6px;margin-top:6px;">
+            <button class="bsm bsm-g" onclick="releaseWithdrawal(${w.id})">✓ Liberar pago</button>
+            <button class="bsm bsm-r" onclick="rejectWithdrawal(${w.id})">✕</button>
+          </div>`:''}
+        </div>
+      </div>
+    </div>`).join('')}
+  </div>`;
+}
+
+function adminCategorias(){
+  return`
+  <div class="card">
+    <div class="ctit">Gestión de categorías</div>
+    <div class="callout cb"><span>ℹ️</span><div>Las categorías se usan para agrupar servicios en el catálogo y en los filtros.</div></div>
+    <div style="margin-bottom:14px;">${S.categories.map((cat,i)=>`
+      <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);">
+        <div style="flex:1;font-size:13px;font-weight:500;">${cat}</div>
+        <div style="font-size:11px;color:var(--text-3);">${ALL_SVCS.filter(s=>s.cat===cat).length} servicios</div>
+        <button class="bsm bsm-r" onclick="if(confirm('¿Eliminar categoría?')){S.categories.splice(${i},1);render()}">✕</button>
+      </div>`).join('')}
+    </div>
+    <div style="display:flex;gap:8px;">
+      <input class="inp" id="new-cat" placeholder="Nueva categoría..." style="flex:1;">
+      <button class="btn btn-p" style="width:auto;padding:9px 16px;" onclick="
+        const v=document.getElementById('new-cat').value.trim();
+        if(v&&!S.categories.includes(v)){S.categories.push(v);render();}
+        else if(S.categories.includes(v))showToast('Ya existe esta categoría','warn');
+      ">+ Agregar</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="ctit">Servicios por categoría</div>
+    ${S.categories.map(cat=>{
+      const svcs=ALL_SVCS.filter(s=>s.cat===cat);
+      return svcs.length?`<div style="margin-bottom:12px;">
+        <div style="font-size:12px;font-weight:600;color:var(--purple);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.05em;">${cat}</div>
+        ${svcs.map(s=>`<div style="display:flex;align-items:center;gap:8px;padding:5px 0;font-size:12px;">
+          <span>${s.icon}</span><span style="flex:1;">${s.name}</span>
+          <span style="color:var(--text-3);">${prosFor(s.id).length} pros</span>
+          ${S.featuredSvcIds.includes(s.id)?`<span class="featured-badge">⭐</span>`:''}
+        </div>`).join('')}
+      </div>`:'';}).join('')}
+  </div>`;
+}
+
+function toggleFeaturedSvc(id){
+  if(S.featuredSvcIds.includes(id)) S.featuredSvcIds=S.featuredSvcIds.filter(x=>x!==id);
+  else S.featuredSvcIds.push(id);
+  render();
+}
+function toggleFeaturedPro(id){
+  if(S.featuredProIds.includes(id)) S.featuredProIds=S.featuredProIds.filter(x=>x!==id);
+  else S.featuredProIds.push(id);
+  render();
+}
+
+// ── WITHDRAWAL ───────────────────────────────────────────────────────────────
+function requestWithdrawal(){
+  const pro=myPro();
+  const confirmed=S.appointments.filter(a=>a.pro?.id===pro.id&&a.status==='confirmed');
+  const earn=confirmed.reduce((s,a)=>s+a.price,0);
+  const paid=S.withdrawals.filter(w=>w.proId===pro.id&&w.status==='paid').reduce((s,w)=>s+w.amount,0);
+  const pending=S.withdrawals.filter(w=>w.proId===pro.id&&w.status==='pending').reduce((s,w)=>s+w.amount,0);
+  const available=earn-paid-pending;
+  if(available<=0){showToast('No tienes saldo disponible','err');return;}
+  S.withdrawals.push({
+    id:uid(), proId:pro.id, proName:pro.name,
+    amount:available, status:'pending',
+    requestDate:todayStr(), paidDate:null
+  });
+  showToast(`Solicitud enviada por ${fp(available)}. El admin procesará el pago el próximo viernes.`,'ok',4500);
+  render();
+}
+function releaseWithdrawal(id){
+  S.withdrawals=S.withdrawals.map(w=>w.id===id?{...w,status:'paid',paidDate:todayStr()}:w);
+  render();
+}
+function rejectWithdrawal(id){
+  if(confirm('¿Rechazar esta solicitud de retiro?'))
+    S.withdrawals=S.withdrawals.map(w=>w.id===id?{...w,status:'rejected'}:w);
+  render();
+}
+
+// ── RENDER ────────────────────────────────────────────────────────────────────
+// FIX 11: track last rendered state to avoid redundant topbar/drawer repaints
+let _lastUser=null, _lastDrawer=false, _lastDrawerTab='';
+function render(){
+  const views={home:vHome,booking:vBooking,confirm:vConfirm,clientDash:vClientDash,pro:vPro,admin:vAdmin};
+  const userChanged=S.user!==_lastUser;
+  const drawerChanged=S.drawerOpen!==_lastDrawer||S.drawerTab!==_lastDrawerTab;
+  if(userChanged||drawerChanged){
+    renderTopbar();
+    renderDrawer();
+    _lastUser=S.user; _lastDrawer=S.drawerOpen; _lastDrawerTab=S.drawerTab;
+  }
+  document.getElementById('mc').innerHTML=(views[S.view]||vHome)();
+}
+render();
+</script>
+
+<div id="toast-container"></div>
+<script>
+// FIX 6: Toast system — replaces all native alert() calls
+function showToast(msg, type='info', duration=3200){
+  const tc=document.getElementById('toast-container');
+  if(!tc) return;
+  const icons={info:'💜',ok:'✓',warn:'⚠️',err:'✕'};
+  const t=document.createElement('div');
+  t.className=`toast ${type}`;
+  t.innerHTML=`<span>${icons[type]||'ℹ️'}</span><span>${esc(msg)}</span>`;
+  tc.appendChild(t);
+  setTimeout(()=>{
+    t.style.animation='toast-out 0.3s ease forwards';
+    setTimeout(()=>t.remove(),300);
+  },duration);
+}
+</script>
+
+</body>
+</html>
