@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Encuesta para profesionales de belleza · Cut Me</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--brand:#7B5EA7;--brand-d:#5E4585;--cta:#B8325B;--ink:#1A1228;--mute:#5F5873;--bg:#F6F4FB;--card:#fff;--line:#DDD7EA;--ok:#2E7D4F;--warn:#9A5B00;--err:#B3261E}
+@media (prefers-color-scheme:dark){:root{--brand:#B79CE0;--brand-d:#D2BFF2;--cta:#E0587F;--ink:#F3EEFB;--mute:#B9B0CC;--bg:#16101F;--card:#201830;--line:#3A2F52}}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 'DM Sans',system-ui,sans-serif}
+h1,h2{font-family:'Syne',system-ui,sans-serif;line-height:1.15;margin:0}
+.wrap{max-width:640px;margin:0 auto;padding:0 16px 96px}
+header.top{position:sticky;top:0;z-index:5;background:var(--bg);padding:12px 16px 10px;border-bottom:1px solid var(--line)}
+header.top .in{max-width:640px;margin:0 auto}
+.brand{font-family:'Syne',sans-serif;font-weight:800;color:var(--brand);font-size:18px}
+.bar{height:6px;border-radius:99px;background:var(--line);margin-top:8px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--brand);transition:width .25s}
+.step-label{font-size:13px;color:var(--mute);margin-top:6px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 16px;margin-top:16px}
+h1{font-size:28px;margin-top:24px}
+h2{font-size:22px}
+p{margin:8px 0}
+.mute{color:var(--mute);font-size:14px}
+.q{margin-top:24px}
+.q:first-of-type{margin-top:16px}
+.q>label,.q>.lbl{display:block;font-weight:700;margin-bottom:4px}
+.q .hint{color:var(--mute);font-size:14px;margin:0 0 8px}
+.req{color:var(--cta)}
+.opts{display:grid;gap:8px;margin-top:8px}
+.opt{display:flex;gap:12px;align-items:flex-start;border:1.5px solid var(--line);border-radius:12px;padding:12px;min-height:48px;cursor:pointer;background:var(--card)}
+.opt:hover{border-color:var(--brand)}
+.opt input{margin:3px 0 0;width:20px;height:20px;accent-color:var(--brand);flex:none}
+.opt:has(input:checked){border-color:var(--brand);background:color-mix(in srgb,var(--brand) 10%,var(--card))}
+.opt:has(input:focus-visible){outline:3px solid var(--brand);outline-offset:2px}
+.scale{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:8px}
+.scale .opt{flex-direction:column;align-items:center;text-align:center;padding:10px 4px;gap:6px}
+.scale-l{display:flex;justify-content:space-between;color:var(--mute);font-size:13px;margin-top:6px}
+input[type=text],input[type=tel],textarea{width:100%;font:inherit;color:inherit;background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:12px;min-height:48px}
+textarea{min-height:110px;resize:vertical}
+input:focus-visible,textarea:focus-visible,button:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+.err{color:var(--err);font-size:14px;margin-top:6px;min-height:21px;visibility:hidden}
+.q.bad .err{visibility:visible}
+.q.bad .opt,.q.bad input[type=text],.q.bad textarea{border-color:var(--err)}
+table.ex{width:100%;border-collapse:collapse;font-size:14px;margin-top:12px}
+table.ex th,table.ex td{padding:8px 4px;border-bottom:1px solid var(--line);text-align:right}
+table.ex th:first-child,table.ex td:first-child{text-align:left}
+table.ex tr.tot td{font-weight:700;border-bottom:0}
+.note{background:color-mix(in srgb,var(--warn) 12%,var(--card));border-left:4px solid var(--warn);padding:10px 12px;border-radius:8px;font-size:14px;margin-top:12px}
+.nav{position:fixed;left:0;right:0;bottom:0;background:var(--bg);border-top:1px solid var(--line);padding:12px 16px calc(12px + env(safe-area-inset-bottom))}
+.nav .in{max-width:640px;margin:0 auto;display:flex;gap:12px}
+button{font:inherit;font-weight:700;border-radius:12px;border:0;min-height:48px;padding:0 20px;cursor:pointer}
+.primary{background:var(--cta);color:#fff;flex:1}
+.ghost{background:transparent;color:var(--brand-d);border:1.5px solid var(--line)}
+button[disabled]{opacity:.6;cursor:wait}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+[hidden]{display:none!important}
+.done{text-align:center;padding:32px 16px}
+.done .tick{width:56px;height:56px;border-radius:50%;background:var(--ok);color:#fff;font-size:32px;display:grid;place-items:center;margin:0 auto 12px}
+</style>
+</head>
+<body>
+<header class="top"><div class="in">
+  <div class="brand">Cut Me</div>
+  <div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="pb"><i id="pbi"></i></div>
+  <div class="step-label" id="stl"></div>
+</div></header>
+
+<main class="wrap" id="app"></main>
+
+<div class="nav" id="nav"><div class="in">
+  <button class="ghost" id="back" type="button" hidden>Atrás</button>
+  <button class="primary" id="next" type="button">Empezar</button>
+</div></div>
+
+<script>
+/* ===== CONFIGURACIÓN ===== */
+const SHEETS_URL='https://script.google.com/macros/s/AKfycbx59NVecpYfhgQrhMvtzGk-bDXPuzxwMc7hojmDt6jJt3YwkG9h1rngOr0xDhPFgnQX7g/exec';   // URL /exec de Apps Script (la misma de los otros HTML)
+const SHEETS_TOKEN='';               // igual que SHARED_TOKEN en Code.gs, si lo usas
+const EJ={ticket:20000,com:0.12,ret:0.1525}; // ejemplo mostrado a las profesionales (hipótesis, no oferta)
+
+/* ===== PREGUNTAS ===== */
+const O=(...a)=>a;
+const S=[
+{t:'Tu trabajo',q:[
+ {id:'servicios',type:'multi',req:1,l:'¿Qué servicios haces?',h:'Marca todos los que correspondan.',o:O('Corte de pelo','Color o tintura','Peinado','Uñas (manicure o pedicure)','Maquillaje','Cejas y pestañas','Masajes','Depilación','Barbería'),other:1},
+ {id:'comuna',type:'text',req:1,l:'¿En qué comuna atiendes principalmente?',ph:'Ej.: Ñuñoa'},
+ {id:'modalidad',type:'multi',req:1,l:'¿Cómo atiendes?',o:O('En mi casa o estudio','En un salón (arriendo sillón o espacio)','A domicilio de la clienta','Tengo mi propio local con personal'),other:0},
+ {id:'experiencia',type:'single',l:'¿Hace cuánto trabajas en esto?',o:O('Menos de 1 año','1 a 3 años','4 a 7 años','Más de 7 años')},
+ {id:'clientas_semana',type:'single',req:1,l:'¿Cuántas clientas atiendes en una semana normal?',o:O('1 a 5','6 a 10','11 a 20','Más de 20')},
+ {id:'ticket',type:'single',req:1,l:'¿Cuánto cobra tu servicio más frecuente?',h:'El valor típico, no el más caro.',o:O('Menos de $10.000','$10.000 a $15.000','$15.001 a $20.000','$20.001 a $30.000','Más de $30.000')}
+]},
+{t:'Cómo trabajas hoy',q:[
+ {id:'agenda_actual',type:'multi',req:1,l:'¿Cómo llevas tu agenda hoy?',o:O('WhatsApp','Mensajes de Instagram','Cuaderno o papel','Google Calendar u otro calendario','App de agenda (AgendaPro, Fresha u otra)','Llamadas'),other:1},
+ {id:'cobro_actual',type:'multi',req:1,l:'¿Cómo te pagan las clientas?',o:O('Efectivo','Transferencia','Tarjeta (POS, Mercado Pago, SumUp u otro)','Link de pago'),other:1},
+ {id:'dolores',type:'multi',max:3,req:1,l:'¿Qué es lo que más te complica hoy?',h:'Elige hasta 3.',o:O('Coordinar horarios por chat','Clientas que cancelan o no llegan','Que me paguen a tiempo','Conseguir clientas nuevas','Saber cuánto gano realmente','Hacer boletas y trámites con el SII','Nada de esto me complica')},
+ {id:'no_show',type:'single',l:'¿Cuántas citas se te caen (cancelan o no llegan) por cada 10?',o:O('Casi ninguna','1 de cada 10','2 a 3 de cada 10','4 o más de cada 10')},
+ {id:'clientas_nuevas_mes',type:'single',l:'¿Cuántas clientas nuevas te llegan en un mes, por cualquier medio?',o:O('Ninguna','1 a 2','3 a 5','6 a 10','Más de 10')}
+]},
+{t:'Boletas y formalización',intro:'Esto es para entender la realidad de cada una. No hay respuestas buenas ni malas, y no pedimos tu RUT.',q:[
+ {id:'estado_formal',type:'single',req:1,l:'Hoy, ¿cuál es tu situación con el SII?',o:O('Tengo inicio de actividades y emito boleta de honorarios','Tengo inicio de actividades y emito boleta de ventas y servicios (con IVA)','Tengo RUT, pero no he iniciado actividades','No emito boletas hoy','Prefiero no responder')},
+ {id:'razon_no_formal',type:'multi',l:'¿Qué te ha frenado de emitir boletas?',h:'Marca todas las que apliquen.',showIf:a=>['Tengo RUT, pero no he iniciado actividades','No emito boletas hoy'].includes(a.estado_formal),o:O('Me parece complicado','No sé cómo hacerlo','No me ha hecho falta','Me preocupa pagar más impuestos','Me preocupa perder algún beneficio o ayuda social','Lo estoy pensando'),other:1},
+ {id:'formalizarse_ayuda',type:'single',req:1,l:'Si una plataforma te acompañara paso a paso con el inicio de actividades y la boleta, ¿lo harías?',showIf:a=>!a.estado_formal||!a.estado_formal.startsWith('Tengo inicio'),o:O('Sí','Quizás, depende de cuánto me quede','No por ahora')}
+]},
+{t:'Una idea que estamos evaluando',idea:1,q:[
+ {id:'interes',type:'scale',req:1,l:'¿Qué tan útil te parece esto para tu trabajo?',lo:'Nada útil',hi:'Muy útil'},
+ {id:'reaccion_neto',type:'single',req:1,l:'Mirando los montos de arriba, ¿qué te parece?',o:O('Me convendría si me trae clientas nuevas','Me convendría aunque no traiga clientas nuevas','No me convendría','No lo sé')},
+ {id:'clientas_nuevas_necesarias',type:'single',l:'¿Cuántas clientas nuevas al mes necesitarías para que valga la pena?',o:O('1 a 2','3 a 5','6 a 10','Más de 10','Ninguna cantidad me convencería')},
+ {id:'comision_max',type:'single',req:1,l:'¿Cuál es la comisión máxima por reserva que aceptarías (sin contar el IVA)?',o:O('No pagaría comisión','Hasta 5%','Hasta 8%','Hasta 10%','Hasta 12%','Hasta 15%','Más de 15%')},
+ {id:'comision_propias',type:'single',l:'Para clientas que ya son tuyas y reservan por tu propio link, ¿qué te parecería justo?',o:O('No pagar comisión','Pagar menos que por clientas nuevas','Pagar lo mismo','No usaría la plataforma con mis clientas de siempre')},
+ {id:'retiro_plazo',type:'single',l:'¿Cuánto tiempo después del servicio esperas recibir tu plata?',o:O('Ese mismo día','Dentro de 24 a 48 horas','Hasta 3 días hábiles','Una vez por semana está bien','Cada 15 días está bien')},
+ {id:'pago_retenido',type:'single',l:'La clienta paga al reservar y la plataforma te transfiere después del servicio. ¿Te molestaría?',o:O('No','Un poco','Mucho')},
+ {id:'preocupaciones',type:'multi',max:3,l:'¿Qué te preocuparía más de usar algo así?',h:'Elige hasta 3.',o:O('Que mis clientas no quieran pagar con tarjeta','La comisión','La retención de impuestos','Que el SII vea mis ingresos','Que no me lleguen clientas nuevas','Que la clienta se quede con la plataforma y no conmigo','Que sea difícil de usar','No me preocupa nada'),other:1}
+]},
+{t:'Para terminar',q:[
+ {id:'abierto',type:'text',area:1,l:'¿Qué tendría que pasar para que dijeras que sí? ¿Y para que dijeras que no?',ph:'Escribe con tus palabras'},
+ {id:'piloto',type:'single',req:1,l:'¿Te gustaría que te contactemos para una prueba piloto?',o:O('Sí, contáctenme','Quizás más adelante','No, gracias')},
+ {id:'nombre',type:'text',l:'Tu nombre',showIf:a=>a.piloto&&a.piloto.startsWith('Sí')||a.piloto==='Quizás más adelante',ph:'Nombre y apellido'},
+ {id:'whatsapp',type:'tel',l:'Tu WhatsApp',showIf:a=>a.piloto&&a.piloto.startsWith('Sí')||a.piloto==='Quizás más adelante',ph:'+56 9 1234 5678'},
+ {id:'instagram',type:'text',l:'Tu Instagram (opcional)',showIf:a=>a.piloto&&a.piloto.startsWith('Sí')||a.piloto==='Quizás más adelante',ph:'@tuusuario'},
+ {id:'consentimiento',type:'check',req:1,l:'Acepto que Cut Me use mis respuestas para investigación. Mis respuestas no se publican con mi nombre. Si dejé mis datos de contacto, acepto que me contacten sobre esta prueba. Puedo pedir que borren mis datos escribiendo a quien me envió esta encuesta.'}
+]}
+];
+
+/* ===== ESTADO ===== */
+const ans={};let step=-1; // -1 intro, 0..S.length-1 secciones, S.length final
+const app=document.getElementById('app'),nextB=document.getElementById('next'),backB=document.getElementById('back');
+const money=n=>'$'+Math.round(n).toLocaleString('es-CL');
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const ref=(new URLSearchParams(location.search).get('ref')||'').slice(0,40);
+let sending=false;
+
+function ejemploHTML(){
+  const t=EJ.ticket,com=t*EJ.com,iva=com*0.19,ret=t*EJ.ret;
+  const a=t-com-iva-ret,b=t-ret,c=t;
+  return `<p class="mute">Ejemplo con un servicio de ${money(t)}. <strong>Son cifras de ejemplo para conocer tu opinión; la comisión no está definida.</strong></p>
+  <table class="ex"><thead><tr><th></th><th>Con Cut Me</th><th>Directo con boleta</th><th>Directo sin boleta</th></tr></thead><tbody>
+  <tr><td>Cobras</td><td>${money(t)}</td><td>${money(t)}</td><td>${money(t)}</td></tr>
+  <tr><td>Comisión (12%)</td><td>−${money(com)}</td><td>—</td><td>—</td></tr>
+  <tr><td>IVA sobre la comisión</td><td>−${money(iva)}</td><td>—</td><td>—</td></tr>
+  <tr><td>Retención 15,25%*</td><td>−${money(ret)}</td><td>−${money(ret)}</td><td>—</td></tr>
+  <tr class="tot"><td>Te queda</td><td>${money(a)}</td><td>${money(b)}</td><td>${money(c)}</td></tr></tbody></table>
+  <p class="mute">*"Directo con boleta" es cobrar tú misma con boleta de honorarios. La retención es un adelanto de tu impuesto a la renta (15,25% en 2026). Según tu situación, puede devolverse o no al declarar. La clienta paga lo mismo en todos los casos.</p>`;
+}
+
+function render(){
+  const total=S.length+1;
+  const pct=step<0?0:Math.round((step/(total-1))*100);
+  document.getElementById('pbi').style.width=pct+'%';
+  document.getElementById('pb').setAttribute('aria-valuenow',pct);
+  backB.hidden=step<=0||step>=S.length;
+  document.getElementById('nav').hidden=step>=S.length;
+  document.getElementById('stl').textContent=step<0?'':(step<S.length?`Paso ${step+1} de ${S.length} · ${S[step].t}`:'');
+  if(step<0){
+    app.innerHTML=`<h1>Cuéntanos cómo trabajas</h1>
+    <div class="card"><p>Somos <strong>Cut Me</strong>, una plataforma chilena en desarrollo para reservar servicios de belleza con profesionales independientes. Antes de construirla queremos escuchar a quienes hacen el trabajo.</p>
+    <p><strong>Toma unos 5 minutos.</strong> Es una investigación, no una venta ni una oferta: no hay compromiso de ningún tipo.</p>
+    <p class="mute">No pedimos RUT ni datos bancarios. Dejar tu contacto es opcional y solo al final.</p></div>`;
+    nextB.textContent='Empezar';return;
+  }
+  if(step>=S.length){
+    app.innerHTML=`<div class="card done"><div class="tick" aria-hidden="true">✓</div><h2>¡Gracias!</h2><p>Tus respuestas nos ayudan a decidir qué construir y cómo hacerlo justo para quienes trabajan en belleza.</p><p class="mute">Ya puedes cerrar esta página.</p></div>`;return;
+  }
+  const sec=S[step];
+  let h=`<h1>${esc(sec.t)}</h1>`;
+  if(sec.intro)h+=`<p class="mute">${esc(sec.intro)}</p>`;
+  if(sec.idea)h+=`<div class="card"><h2>Cut Me, en simple</h2><p>Un link de reservas para ti: tus clientas reservan y pagan online, el pago queda retenido hasta que haces el servicio y la clienta recibe su boleta. Tú ves en un panel cada reserva, la comisión, la retención y lo que te queda, y retiras tu plata cada semana. Te ayudamos con el inicio de actividades si lo necesitas.</p>${ejemploHTML()}</div>`;
+  h+=`<div class="card">`;
+  sec.q.forEach(q=>{ if(q.showIf&&!q.showIf(ans))return; h+=qHTML(q); });
+  h+=`<div class="hp" aria-hidden="true"><label>No llenar<input type="text" id="hp" tabindex="-1" autocomplete="off"></label></div></div>`;
+  app.innerHTML=h;
+  nextB.textContent=step===S.length-1?'Enviar':'Siguiente';
+  window.scrollTo({top:0});
+  bind();
+}
+
+function qHTML(q){
+  const v=ans[q.id];let h=`<div class="q" data-q="${q.id}"><div class="lbl" id="l_${q.id}">${esc(q.l)}${q.req?' <span class="req" aria-hidden="true">*</span>':''}</div>`;
+  if(q.h)h+=`<p class="hint">${esc(q.h)}</p>`;
+  if(q.type==='single'||q.type==='multi'){
+    const t=q.type==='single'?'radio':'checkbox';
+    h+=`<div class="opts" role="${t==='radio'?'radiogroup':'group'}" aria-labelledby="l_${q.id}">`;
+    q.o.forEach((o,i)=>{const on=t==='radio'?v===o:(v||[]).includes(o);
+      h+=`<label class="opt"><input type="${t}" name="${q.id}" value="${esc(o)}" ${on?'checked':''}><span>${esc(o)}</span></label>`;});
+    if(q.other){const ov=ans[q.id+'_otro']||'';h+=`<label class="opt"><span style="flex:1"><span style="display:block;margin-bottom:6px">Otro</span><input type="text" data-other="${q.id}" value="${esc(ov)}" placeholder="Escribe aquí"></span></label>`;}
+    h+=`</div>`;
+  }else if(q.type==='scale'){
+    h+=`<div class="scale" role="radiogroup" aria-labelledby="l_${q.id}">`;
+    for(let i=1;i<=5;i++)h+=`<label class="opt"><input type="radio" name="${q.id}" value="${i}" ${String(v)===String(i)?'checked':''}><span>${i}</span></label>`;
+    h+=`</div><div class="scale-l"><span>${esc(q.lo)}</span><span>${esc(q.hi)}</span></div>`;
+  }else if(q.type==='check'){
+    h=`<div class="q" data-q="${q.id}"><label class="opt"><input type="checkbox" name="${q.id}" ${v?'checked':''}><span>${esc(q.l)} <span class="req" aria-hidden="true">*</span></span></label>`;
+  }else if(q.area){
+    h+=`<textarea name="${q.id}" aria-labelledby="l_${q.id}" placeholder="${esc(q.ph||'')}">${esc(v||'')}</textarea>`;
+  }else{
+    h+=`<input type="${q.type==='tel'?'tel':'text'}" name="${q.id}" aria-labelledby="l_${q.id}" value="${esc(v||'')}" placeholder="${esc(q.ph||'')}" maxlength="120">`;
+  }
+  return h+(q.req?`<div class="err" role="alert">${q.max?`Elige entre 1 y ${q.max} opciones.`:'Esta pregunta es obligatoria.'}</div>`:'')+`</div>`;
+}
+
+function bind(){
+  app.querySelectorAll('input[type=radio],input[type=checkbox],input[type=text],input[type=tel],textarea').forEach(el=>{
+    el.addEventListener('change',onChange);el.addEventListener('input',e=>{if(el.type==='text'||el.type==='tel'||el.tagName==='TEXTAREA')onChange(e,true);});
+  });
+}
+function qById(id){for(const s of S)for(const q of s.q)if(q.id===id)return q;}
+function onChange(e,typing){
+  const el=e.target;if(el.id==='hp')return;
+  if(el.dataset.other){ans[el.dataset.other+'_otro']=el.value.slice(0,200);return;}
+  const q=qById(el.name);if(!q)return;
+  if(q.type==='single'||q.type==='scale')ans[q.id]=el.value;
+  else if(q.type==='multi'){
+    const cur=new Set(ans[q.id]||[]);
+    if(el.checked){ if(q.max&&cur.size>=q.max){el.checked=false;return;} cur.add(el.value);} else cur.delete(el.value);
+    ans[q.id]=[...cur];
+  }else if(q.type==='check')ans[q.id]=el.checked;
+  else ans[q.id]=el.value.slice(0,q.area?1500:120);
+  if(!typing){const w=el.closest('.q');w&&w.classList.remove('bad');
+    if(q.id==='estado_formal'||q.id==='piloto'){const y=window.scrollY;render();window.scrollTo({top:y});}}
+}
+
+function valid(){
+  let ok=true,first=null;
+  S[step].q.forEach(q=>{
+    if(q.showIf&&!q.showIf(ans))return;
+    const v=ans[q.id];const has=q.type==='multi'?((v&&v.length)||(ans[q.id+'_otro']||'').trim()):q.type==='check'?!!v:(v!==undefined&&String(v).trim()!=='');
+    const bad=(q.req&&!has);
+    const w=app.querySelector(`[data-q="${q.id}"]`);if(w){w.classList.toggle('bad',!!bad);}
+    if(bad){ok=false;first=first||w;}
+  });
+  if(first)first.scrollIntoView({block:'center'});
+  return ok;
+}
+
+nextB.addEventListener('click',()=>{
+  if(step>=0&&!valid())return;
+  if(step===S.length-1){submit();return;}
+  step++;render();
+});
+backB.addEventListener('click',()=>{if(step>0){step--;render();}});
+
+function submit(){
+  if(sending)return;
+  const hp=document.getElementById('hp');
+  if(hp&&hp.value){step=S.length;render();return;} // bot: finge éxito sin enviar
+  try{const last=+localStorage.getItem('cm_enc_t')||0;if(Date.now()-last<20000){step=S.length;render();return;}}catch(_){}
+  sending=true;nextB.disabled=true;nextB.textContent='Enviando…';
+  const d={id:'E'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),fuente:ref};
+  S.forEach(s=>s.q.forEach(q=>{
+    if(q.showIf&&!q.showIf(ans))return;
+    let v=ans[q.id];
+    if(q.type==='multi'){v=(v||[]).slice();const o=(ans[q.id+'_otro']||'').trim();if(o)v.push('Otro: '+o);}
+    d[q.id]=v===undefined?'':v;
+  }));
+  const done=()=>{try{localStorage.setItem('cm_enc_t',Date.now());}catch(_){} sending=false;step=S.length;render();};
+  if(!SHEETS_URL||SHEETS_URL.indexOf('TU_')===0){console.info('[Encuesta] sin SHEETS_URL; respuestas:',d);done();return;}
+  fetch(SHEETS_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'save_encuesta',data:d,token:SHEETS_TOKEN})})
+   .then(r=>r.json()).then(r=>{ if(r&&r.ok)done(); else throw new Error((r&&r.error)||'error'); })
+   .catch(()=>{sending=false;nextB.disabled=false;nextB.textContent='Enviar';alert('No pudimos enviar tus respuestas. Revisa tu conexión e inténtalo de nuevo.');});
+}
+render();
+</script>
+</body>
+</html>
